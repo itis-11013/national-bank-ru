@@ -21,7 +21,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("ru.itis.nationalbankru.controllers"))
+                .apis(RequestHandlerSelectors.basePackage("ru.itis.controllers"))
                 .paths(PathSelectors.any())
                 .build();
     }
