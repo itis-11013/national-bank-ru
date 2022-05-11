@@ -4,5 +4,6 @@ import lombok.Builder;
 
 @Builder
 public class OrganizationResponseDto {
-    private String token;
+    private Object data;
+    private Long time;
 }
