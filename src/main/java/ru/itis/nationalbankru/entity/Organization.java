@@ -11,7 +11,6 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Entity
 public class Organization {
@@ -32,6 +31,8 @@ public class Organization {
 
     @Column(name = "created_at", nullable = false)
     private String createdAt;
+
+    //TODO: add token column
 
     @Override
     public boolean equals(Object o) {
