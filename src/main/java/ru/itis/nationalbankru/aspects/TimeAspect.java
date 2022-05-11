@@ -7,13 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import ru.itis.nationalbankru.dto.OrganizationResponseDto;
 
-/**
- * 12.05.2021
- * 04. REST API
- *
- * @author Sidikov Marsel (First Software Engineering Platform)
- * @version v1.0
- */
 @Component
 @Aspect
 public class TimeAspect {
