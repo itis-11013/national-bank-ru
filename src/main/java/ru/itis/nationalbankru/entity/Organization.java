@@ -20,6 +20,9 @@ public class Organization {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Column(name = "inner_id", nullable = false)
+    private Long inner_id;
+
     @Column(name = "name", nullable = false)
     private String name;
 
