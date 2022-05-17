@@ -1,10 +1,11 @@
 package ru.itis.nationalbankru.entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,7 +14,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Organization {
+@Table(name = "users")
+public class User {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -21,12 +23,15 @@ public class Organization {
     private Long id;
 
     @Column(name = "inner_id", nullable = false)
-    private Long inner_id;
+    private UUID inner_id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "balance", nullable = false)
+    private Double balance;
+
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password_hash", nullable = false)
@@ -35,18 +40,9 @@ public class Organization {
     @Column(name = "created_at", nullable = false)
     private String createdAt;
 
-    //TODO: add token column
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Organization that = (Organization) o;
-        return id != null && Objects.equals(id, that.id);
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    List<Role> roles = new ArrayList<>();
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

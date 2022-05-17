@@ -1,9 +1,9 @@
-package ru.itis.nationalbankru.dto;
+package ru.itis.nationalbankru.dto.user;
 
 import lombok.Builder;
 
 @Builder
-public class OrganizationResponseDto {
+public class UserResponseDto {
     private Object data;
     private Long time;
 }
