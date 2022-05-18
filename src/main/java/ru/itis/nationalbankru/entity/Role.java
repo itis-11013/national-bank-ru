@@ -15,5 +15,7 @@ public class Role {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    @Column(name = "name", nullable = false)
     String name;
 }
