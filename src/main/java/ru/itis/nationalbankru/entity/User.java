@@ -3,18 +3,17 @@ package ru.itis.nationalbankru.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "users")
+@Table(name = "accounts")
 public class User {
 
     @Id
@@ -22,17 +21,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "inner_id", nullable = false)
-    private UUID inner_id;
+    @Column(name = "username", nullable = false)
+    private String username;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "balance", nullable = false)
-    private Double balance;
-
+    @Email
     @Column(name = "email", unique = true, nullable = false)
     private String email;
+
+    @Column(name = "status", unique = true, nullable = false)
+    private Status status;
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
@@ -40,9 +37,16 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private String createdAt;
 
+    public enum Status {
+        BANNED,
+        ACTIVE
+    }
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
     List<Role> roles = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    List<Organization> organizations = new ArrayList<>();
 }

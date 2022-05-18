@@ -5,30 +5,40 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.itis.nationalbankru.dto.user.UserRequestDto;
 import ru.itis.nationalbankru.dto.user.UserResponseDto;
 import ru.itis.nationalbankru.services.user.UserService;
 
-@RestController("/user")
+import java.util.List;
+
+@RestController
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
     public final UserService userService;
 
-    @ApiOperation(value = "SignUp an organization")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully Sign", response = UserResponseDto.class),
-            @ApiResponse(code = 401, message = "Authorization required"),
-            @ApiResponse(code = 404, message = "Not found"),
-            @ApiResponse(code = 500, message = "Server error")
-    })
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
 
     @PostMapping("/new")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto) {
         return ResponseEntity.ok(userService.createUser(userRequestDto));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponseDto> updateUserWithId(@PathVariable Long id,
+                                                            @RequestBody UserRequestDto userRequestDto) {
+        return ResponseEntity.ok(userService.updateUserWithId(id, userRequestDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> deleteUserWithId(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.deleteUserWithId(id));
+    }
+
 
 }
