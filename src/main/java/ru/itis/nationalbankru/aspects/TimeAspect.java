@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import ru.itis.nationalbankru.dto.user.UserResponseDto;
 
+
 @Component
 @Aspect
 public class TimeAspect {
@@ -18,7 +19,6 @@ public class TimeAspect {
         ResponseEntity response = (ResponseEntity) responseEntity;
         return ResponseEntity.ok(UserResponseDto.builder()
                 .time(after - before)
-                .data(response.getBody())
                 .build());
     }
 }
