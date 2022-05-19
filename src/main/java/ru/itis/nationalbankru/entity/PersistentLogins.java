@@ -19,6 +19,6 @@ public class PersistentLogins {
     @Column(name = "token", nullable = false)
     String token;
 
-    @Column(name = "lastUsed", nullable = false)
+    @Column(name = "last_used", nullable = false)
     Timestamp lastUsed;
 }
