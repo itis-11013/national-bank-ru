@@ -14,10 +14,10 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "accounts")
-public class User {
+public class User extends DateAudit {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", updatable = false, insertable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
@@ -33,9 +33,6 @@ public class User {
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
-
-    @Column(name = "created_at", nullable = false)
-    private String createdAt;
 
     public enum Status {
         BANNED,

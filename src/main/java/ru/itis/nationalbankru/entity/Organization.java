@@ -12,10 +12,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Organization {
+public class Organization extends DateAudit{
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", updatable = false, insertable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
