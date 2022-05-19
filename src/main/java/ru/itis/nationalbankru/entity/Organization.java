@@ -28,6 +28,7 @@ public class Organization {
     @Column(name = "address", nullable = false)
     private String address;
 
+    @Builder.Default
     private static final String country = "RU";
 
     @ManyToOne

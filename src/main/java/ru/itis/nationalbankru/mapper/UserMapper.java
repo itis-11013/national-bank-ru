@@ -10,5 +10,5 @@ import ru.itis.nationalbankru.entity.User;
 public interface UserMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateFromDto(UserRequestDto dto, @MappingTarget User org);
+    void updateFromDto(UserRequestDto dto, @MappingTarget User user);
 }
