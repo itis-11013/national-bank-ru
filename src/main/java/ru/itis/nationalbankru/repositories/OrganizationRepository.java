@@ -1,4 +1,4 @@
-package ru.itis.nationalbankru.reposistory;
+package ru.itis.nationalbankru.repositories;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

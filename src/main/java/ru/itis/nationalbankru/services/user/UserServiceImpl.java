@@ -12,7 +12,7 @@ import ru.itis.nationalbankru.dto.user.UserRequestDto;
 import ru.itis.nationalbankru.dto.user.UserResponseDto;
 import ru.itis.nationalbankru.entity.User;
 import ru.itis.nationalbankru.mapper.UserMapper;
-import ru.itis.nationalbankru.reposistory.UserRepository;
+import ru.itis.nationalbankru.repositories.UserRepository;
 
 import java.util.List;
 
