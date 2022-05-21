@@ -2,6 +2,7 @@ package ru.itis.nationalbankru.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.nationalbankru.dto.user.UserRequestDto;
 import ru.itis.nationalbankru.dto.user.UserResponseDto;
@@ -9,7 +10,7 @@ import ru.itis.nationalbankru.services.user.UserService;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
