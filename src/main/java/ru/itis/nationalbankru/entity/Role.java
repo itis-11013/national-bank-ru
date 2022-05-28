@@ -3,20 +3,18 @@ package ru.itis.nationalbankru.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
-@ToString
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role extends DateAudit {
+public class Role extends AbstractEntity {
 
-    @Id
-    @Column(name = "id", updatable = false, insertable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     String name;
 }
