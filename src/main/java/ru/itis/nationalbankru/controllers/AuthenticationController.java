@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,16 +16,19 @@ import ru.itis.nationalbankru.services.user.UserServiceImpl;
 
 @Controller
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
+
+    public AuthController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/signIn")
     public String getSignInPage() {
         return "sign_in_page";
     }
-
 
     @ApiOperation(value = "Create User")
     @ApiResponses(value = {
@@ -40,7 +44,12 @@ public class AuthController {
 
     @PostMapping("/signUp")
     public String signUp(UserRequestDto userRequestDto) {
-        userService.createUser(userRequestDto);
+        try {
+            userService.createUser(userRequestDto);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "redirect:/auth/signUp";
+        }
         return "redirect:/auth/signIn";
     }
 

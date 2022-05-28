@@ -9,11 +9,8 @@
 </head>
 <body>
 <h1>SIGN UP</h1>
-<form action="/signUp" method="post">
+<form action="/ru/auth/signUp" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-    <label>
-        <input name="username" type="text" placeholder="USERNAME" required>
-    </label>
     <label>
         <input name="email" type="email" placeholder="EMAIL" required>
     </label>
