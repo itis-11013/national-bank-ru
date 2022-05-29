@@ -29,6 +29,9 @@ public class Organization extends AbstractEntity {
     @Column(name = "status", nullable = false)
     private Status status;
 
+    @Column(name = "balance", nullable = false)
+    private Double balance;
+
     @Builder.Default
     private static final String country = "RU";
 

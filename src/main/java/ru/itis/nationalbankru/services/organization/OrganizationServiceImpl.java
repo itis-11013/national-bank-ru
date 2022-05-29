@@ -2,6 +2,7 @@ package ru.itis.nationalbankru.services.organization;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final UserHelper userHelper;
     private final PageHelper pageHelper;
 
+    @Value("${organizationBalanceInitAmount}")
+    private Double organizationBalanceInitAmount;
 
     @Override
     public List<OrganizationResponseDto> getAllUserOrganization(PageableDto pageableDto) {
@@ -55,6 +58,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public OrganizationResponseDto createOrganization(OrganizationRequestDto organizationRequestDto) {
         Organization organization = organizationMapper.fromDto(organizationRequestDto);
+        organization.setBalance(organizationBalanceInitAmount);
         //TODO create organization in central bank
         organizationRepository.save(organization);
         return organizationMapper.toDto(organization);
