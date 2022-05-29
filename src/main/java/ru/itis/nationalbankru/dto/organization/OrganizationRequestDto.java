@@ -8,4 +8,5 @@ import lombok.Data;
 public class OrganizationRequestDto {
     String name;
     String address;
+    Double balance;
 }
