@@ -1,8 +1,5 @@
 package ru.itis.nationalbankru.controllers;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.itis.nationalbankru.dto.user.UserRequestDto;
-import ru.itis.nationalbankru.dto.user.UserResponseDto;
 import ru.itis.nationalbankru.services.user.UserServiceImpl;
 
 @Controller

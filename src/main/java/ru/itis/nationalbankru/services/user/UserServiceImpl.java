@@ -2,9 +2,6 @@ package ru.itis.nationalbankru.services.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dozer.DozerBeanMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,7 +13,7 @@ import ru.itis.nationalbankru.entity.Role;
 import ru.itis.nationalbankru.entity.enums.RoleName;
 import ru.itis.nationalbankru.entity.enums.Status;
 import ru.itis.nationalbankru.entity.User;
-import ru.itis.nationalbankru.exception.Exceptions;
+import ru.itis.nationalbankru.exceptions.Exceptions;
 import ru.itis.nationalbankru.repositories.RoleRepository;
 import ru.itis.nationalbankru.repositories.UserRepository;
 
