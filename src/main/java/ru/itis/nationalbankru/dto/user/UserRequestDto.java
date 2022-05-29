@@ -5,10 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+
 @Builder
+@Data
 public class UserRequestDto {
-    private String username;
     private String email;
     private String password;
 }

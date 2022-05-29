@@ -1,5 +1,6 @@
 package ru.itis.nationalbankru.security;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,27 +20,25 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
 
     private final DataSource dataSource;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder, DataSource dataSource) {
+    @Qualifier("customUserDetailsService")
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(PasswordEncoder passwordEncoder, DataSource dataSource, UserDetailsServiceImpl userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServiceBean()).passwordEncoder(passwordEncoder);
-    }
-
-    @Override
-    @Bean
-    public UserDetailsService userDetailsServiceBean()  {
-        return new UserDetailsServiceImpl();
+        auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -47,26 +46,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/auth/*").permitAll()
-                .antMatchers("/dashboard").authenticated()
-                .antMatchers("/organization").authenticated()
-                .antMatchers("/users/*").authenticated()
-                .antMatchers("/users/").hasAuthority("ADMIN")
-                .antMatchers("/bank/*").hasAuthority("ADMIN");
+                .antMatchers("/").authenticated()
+                .antMatchers("/product/*").authenticated()
+                .antMatchers("/payment/*").authenticated()
+                .antMatchers("/contract/*").authenticated()
+                .antMatchers("/organization/*").authenticated()
+                .antMatchers("/user/*").authenticated()
+                .antMatchers("/admin/*").hasAuthority("ADMIN");
 
         http
                 .formLogin()
                 .loginPage("/auth/signIn")
-                .defaultSuccessUrl("/profile")
-                .failureUrl("/signIn?error")
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/")
+                .failureUrl("/auth/signIn?error");
 
         http
-                .rememberMe()
-                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository());
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET"))
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
     }
 
     @Bean

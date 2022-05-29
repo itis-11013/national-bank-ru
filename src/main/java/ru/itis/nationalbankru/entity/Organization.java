@@ -1,6 +1,7 @@
 package ru.itis.nationalbankru.entity;
 
 import lombok.*;
+import ru.itis.nationalbankru.entity.enums.Status;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -12,12 +13,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Organization extends DateAudit{
-
-    @Id
-    @Column(name = "id", updatable = false, insertable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+@Table(name = "organizations")
+public class Organization extends AbstractEntity {
 
     @Column(name = "inner_id", nullable = false)
     private UUID inner_id;
@@ -27,6 +24,10 @@ public class Organization extends DateAudit{
 
     @Column(name = "address", nullable = false)
     private String address;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status;
 
     @Builder.Default
     private static final String country = "RU";
