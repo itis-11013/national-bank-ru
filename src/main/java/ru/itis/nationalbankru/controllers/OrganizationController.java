@@ -9,9 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.itis.nationalbankru.dto.GeneralResponse;
+import ru.itis.nationalbankru.dto.PageableDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
-import ru.itis.nationalbankru.dto.user.UserResponseDto;
 import ru.itis.nationalbankru.entity.enums.RequestStatus;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
 
@@ -28,13 +28,10 @@ public class OrganizationController {
 
     @GetMapping("/")
     public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllUserOrganizations(
-            @RequestParam(defaultValue = "0") Integer pageNo,
-            @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(defaultValue = "updated_at") String sortBy,
+            @RequestBody PageableDto pageableDto,
             RedirectAttributes redirectAttributes) {
         try {
-            List<OrganizationResponseDto> organizationResponseDtos = organizationService.getAllUserOrganization(
-                    pageNo, pageSize, sortBy);
+            List<OrganizationResponseDto> organizationResponseDtos = organizationService.getAllUserOrganization(pageableDto);
             return ResponseEntity.ok(new GeneralResponse<List<OrganizationResponseDto>>().toBuilder()
                     .description("Successfully Fetched User Organizations")
                     .status(RequestStatus.SUCCESS)
@@ -44,30 +41,6 @@ public class OrganizationController {
             redirectAttributes.addAttribute("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<List<OrganizationResponseDto>>().toBuilder()
                     .description("Failed To Fetch User Organizations")
-                    .status(RequestStatus.FAILURE)
-                    .build());
-        }
-    }
-
-    @Secured("ADMIN")
-    @GetMapping("/")
-    public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllOrganizations(
-            @RequestParam(defaultValue = "0") Integer pageNo,
-            @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(defaultValue = "updated_at") String sortBy,
-            RedirectAttributes redirectAttributes) {
-        try {
-            List<OrganizationResponseDto> organizationResponseDtos = organizationService.getAllOrganization(
-                    pageNo, pageSize, sortBy);
-            return ResponseEntity.ok(new GeneralResponse<List<OrganizationResponseDto>>().toBuilder()
-                    .description("Successfully Fetched Organizations")
-                    .status(RequestStatus.SUCCESS)
-                    .data(organizationResponseDtos)
-                    .build());
-        } catch (Exception e) {
-            redirectAttributes.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<List<OrganizationResponseDto>>().toBuilder()
-                    .description("Failed To Fetch Organizations")
                     .status(RequestStatus.FAILURE)
                     .build());
         }
