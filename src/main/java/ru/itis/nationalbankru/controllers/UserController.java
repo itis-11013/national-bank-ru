@@ -25,7 +25,9 @@ public class UserController {
     //TODO: Create get users function & must only be accessible by ADMIN user
 
     @PostMapping("/new")
-    public ResponseEntity<GeneralResponse<UserResponseDto>> createUser(@RequestBody UserRequestDto userRequestDto, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<GeneralResponse<UserResponseDto>> createUser(
+            @RequestBody UserRequestDto userRequestDto,
+            RedirectAttributes redirectAttributes) {
         try {
             UserResponseDto userResponseDto = userService.createUser(userRequestDto);
             return ResponseEntity.ok(new GeneralResponse<UserResponseDto>().toBuilder()
@@ -43,9 +45,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GeneralResponse<UserResponseDto>> updateUserWithId(@PathVariable UUID id,
-                                                                             @RequestBody UserRequestDto userRequestDto,
-                                                                             RedirectAttributes redirectAttributes) {
+    public ResponseEntity<GeneralResponse<UserResponseDto>> updateUserWithId(
+            @PathVariable UUID id,
+            @RequestBody UserRequestDto userRequestDto,
+            RedirectAttributes redirectAttributes) {
         try {
             UserResponseDto userResponseDto = userService.updateUserWithId(id, userRequestDto);
             return ResponseEntity.ok(new GeneralResponse<UserResponseDto>().toBuilder()
@@ -63,7 +66,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<GeneralResponse<UUID>> deleteUserWithId(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<GeneralResponse<UUID>> deleteUserWithId(
+            @PathVariable UUID id,
+            RedirectAttributes redirectAttributes) {
         try {
             UUID uuid = userService.deleteUserWithId(id);
             return ResponseEntity.ok(new GeneralResponse<UUID>().toBuilder()
@@ -82,8 +87,9 @@ public class UserController {
 
     @Secured("ADMIN")
     @PatchMapping("/{id}")
-    public ResponseEntity<GeneralResponse<UUID>> banUserWithId(@PathVariable UUID id,
-                                                               RedirectAttributes redirectAttributes) {
+    public ResponseEntity<GeneralResponse<UUID>> banUserWithId(
+            @PathVariable UUID id,
+            RedirectAttributes redirectAttributes) {
         try {
             userService.banUserWithId(id);
             return ResponseEntity.ok(new GeneralResponse<UUID>().toBuilder()
