@@ -13,7 +13,7 @@ import ru.itis.nationalbankru.entity.Role;
 import ru.itis.nationalbankru.entity.enums.RoleName;
 import ru.itis.nationalbankru.entity.enums.Status;
 import ru.itis.nationalbankru.entity.User;
-import ru.itis.nationalbankru.exception.Exceptions;
+import ru.itis.nationalbankru.exceptions.Exceptions;
 import ru.itis.nationalbankru.repositories.RoleRepository;
 import ru.itis.nationalbankru.repositories.UserRepository;
 

@@ -30,7 +30,7 @@ public class OrganizationController {
     public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllUserOrganizations(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "updated_at") String sortBy,
             RedirectAttributes redirectAttributes) {
         try {
             List<OrganizationResponseDto> organizationResponseDtos = organizationService.getAllUserOrganization(
@@ -54,7 +54,7 @@ public class OrganizationController {
     public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllOrganizations(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "updated_at") String sortBy,
             RedirectAttributes redirectAttributes) {
         try {
             List<OrganizationResponseDto> organizationResponseDtos = organizationService.getAllOrganization(
