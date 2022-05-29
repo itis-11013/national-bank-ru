@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import ru.itis.nationalbankru.entity.User;
-import ru.itis.nationalbankru.exception.Exceptions;
+import ru.itis.nationalbankru.exceptions.Exceptions;
 import ru.itis.nationalbankru.repositories.UserRepository;
 
 
