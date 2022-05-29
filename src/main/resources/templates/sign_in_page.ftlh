@@ -9,16 +9,13 @@
 </head>
 <body>
 <h1>SIGN IN</h1>
-<form action="/signIn" method="post">
+<form action="/ru/auth/signIn" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     <label>
         <input name="email" type="email" placeholder="EMAIL">
     </label>
     <label>
         <input name="password" type="password" placeholder="PASSWORD">
-    </label>
-    <label>
-        <input type="checkbox" name="remember-me">remember me
     </label>
     <input type="submit" value="SIGN IN">
 </form>

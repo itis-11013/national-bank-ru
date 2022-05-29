@@ -4,16 +4,17 @@ import ru.itis.nationalbankru.dto.user.UserRequestDto;
 import ru.itis.nationalbankru.dto.user.UserResponseDto;
 
 import java.util.List;
+import java.util.UUID;
+
 public interface UserService {
+
 
     UserResponseDto createUser(UserRequestDto userRequestDto);
 
-    UserResponseDto updateUserWithId(Long id, UserRequestDto userRequestDto);
+    UserResponseDto updateUserWithId(UUID id, UserRequestDto userRequestDto);
 
-    Long deleteUserWithId(Long id);
+    UUID deleteUserWithId(UUID id);
 
-    void banUserWithUsername(String username);
-
-    List<UserResponseDto> getAllUsers();
+    void banUserWithId(UUID id);
 
 }

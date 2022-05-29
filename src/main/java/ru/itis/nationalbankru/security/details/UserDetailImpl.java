@@ -1,10 +1,10 @@
 package ru.itis.nationalbankru.security.details;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.itis.nationalbankru.entity.Role;
+import ru.itis.nationalbankru.entity.enums.Status;
 import ru.itis.nationalbankru.entity.User;
 
 import java.util.ArrayList;
@@ -52,6 +52,6 @@ public class UserDetailImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return (User.Status.ACTIVE.equals(user.getStatus()));
+        return (Status.ACTIVE.equals(user.getStatus()));
     }
 }
