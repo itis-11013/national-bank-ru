@@ -2,6 +2,7 @@ package ru.itis.nationalbankru.dto.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.itis.nationalbankru.entity.Organization;
@@ -15,8 +16,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Builder
-@Getter
-@Setter
+@Data
 public class UserResponseDto {
     private UUID id;
     private String email;
