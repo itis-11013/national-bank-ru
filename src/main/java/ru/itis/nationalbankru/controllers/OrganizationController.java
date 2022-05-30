@@ -4,7 +4,6 @@ package ru.itis.nationalbankru.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -27,7 +26,7 @@ public class OrganizationController {
 
 
     @GetMapping("/")
-    public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllUserOrganizations(
+    public ResponseEntity<GeneralResponse<?>> getAllUserOrganizations(
             @RequestBody PageableDto pageableDto,
             RedirectAttributes redirectAttributes) {
         try {
@@ -39,7 +38,7 @@ public class OrganizationController {
                     .build());
         } catch (Exception e) {
             redirectAttributes.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<List<OrganizationResponseDto>>().toBuilder()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<>().toBuilder()
                     .description("Failed To Fetch User Organizations")
                     .status(RequestStatus.FAILURE)
                     .build());
@@ -47,7 +46,7 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GeneralResponse<OrganizationResponseDto>> getOrganizationWithId(
+    public ResponseEntity<GeneralResponse<?>> getOrganizationWithId(
             @PathVariable UUID id,
             RedirectAttributes redirectAttributes) {
         try {
@@ -59,7 +58,7 @@ public class OrganizationController {
                     .build());
         } catch (Exception e) {
             redirectAttributes.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<OrganizationResponseDto>().toBuilder()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<>().toBuilder()
                     .description("Failed To Fetch Organization")
                     .status(RequestStatus.FAILURE)
                     .build());
@@ -67,7 +66,7 @@ public class OrganizationController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<GeneralResponse<OrganizationResponseDto>> createOrganization(
+    public ResponseEntity<GeneralResponse<?>> createOrganization(
             @RequestBody OrganizationRequestDto organizationRequestDto,
             RedirectAttributes redirectAttributes) {
         try {
@@ -79,7 +78,7 @@ public class OrganizationController {
                     .build());
         } catch (Exception e) {
             redirectAttributes.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<OrganizationResponseDto>().toBuilder()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<>().toBuilder()
                     .description("Failed To Create Organization")
                     .status(RequestStatus.FAILURE)
                     .build());
@@ -87,7 +86,7 @@ public class OrganizationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GeneralResponse<OrganizationResponseDto>> updateOrganizationWithId(
+    public ResponseEntity<GeneralResponse<?>> updateOrganizationWithId(
             @PathVariable UUID id,
             OrganizationRequestDto organizationRequestDto,
             RedirectAttributes redirectAttributes) {
@@ -102,7 +101,7 @@ public class OrganizationController {
                     .build());
         } catch (Exception e) {
             redirectAttributes.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<OrganizationResponseDto>().toBuilder()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<>().toBuilder()
                     .description("Failed To Update Organization")
                     .status(RequestStatus.FAILURE)
                     .build());
@@ -110,7 +109,7 @@ public class OrganizationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<GeneralResponse<UUID>> deleteUserWithId(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<GeneralResponse<?>> deleteUserWithId(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
         try {
             UUID uuid = organizationService.deleteOrganizationWithId(id);
             return ResponseEntity.ok(new GeneralResponse<UUID>().toBuilder()
@@ -120,30 +119,12 @@ public class OrganizationController {
                     .build());
         } catch (Exception e) {
             redirectAttributes.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<UUID>().toBuilder()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<>().toBuilder()
                     .description("Failed To Delete Organization")
                     .status(RequestStatus.FAILURE)
                     .build());
         }
     }
 
-    @Secured("ADMIN")
-    @PatchMapping("/{id}")
-    public ResponseEntity<GeneralResponse<String>> banOrganizationWithId(
-            @PathVariable UUID id,
-            RedirectAttributes redirectAttributes) {
-        try {
-            organizationService.banOrganizationWithId(id);
-            return ResponseEntity.ok(new GeneralResponse<String>().toBuilder()
-                    .description("Successfully Banned Organization")
-                    .status(RequestStatus.SUCCESS)
-                    .build());
-        } catch (Exception e) {
-            redirectAttributes.addAttribute("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GeneralResponse<String>().toBuilder()
-                    .description("Failed To Ban Organization")
-                    .status(RequestStatus.FAILURE)
-                    .build());
-        }
-    }
+
 }
