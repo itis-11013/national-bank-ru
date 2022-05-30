@@ -4,17 +4,20 @@ import lombok.*;
 import ru.itis.nationalbankru.entity.enums.Status;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "organizations")
 public class Organization extends AbstractEntity {
+
+    @Builder.Default
+    private static final String country = "RU";
 
     @Column(name = "inner_id", nullable = false)
     private UUID inner_id;
@@ -32,10 +35,17 @@ public class Organization extends AbstractEntity {
     @Column(name = "balance", nullable = false)
     private Double balance;
 
-    @Builder.Default
-    private static final String country = "RU";
+    @Column(name = "frozen_balance", nullable = false)
+    private Double frozenBalance;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
+    private List<Contract> sellContracts;
+
+    @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
+    private List<Contract> buyContract;
+
 }

@@ -9,7 +9,7 @@ import ru.itis.nationalbankru.entity.Organization;
 import java.util.List;
 
 @Mapper
-public interface OrganizationMapper {
+public interface OrganizationMapper extends EntityMapper<Organization, OrganizationRequestDto, OrganizationResponseDto> {
 
     OrganizationResponseDto toDto(Organization organization);
 

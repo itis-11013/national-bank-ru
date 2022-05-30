@@ -96,7 +96,13 @@ public class OrganizationServiceImpl implements OrganizationService {
         log.info(String.format("Banned Organization with name %s", organization.getName()));
     }
 
-    private Organization _getOrganizationWithId(UUID id) throws OrganizationNotFoundException {
+    @Override
+    public Organization _getOrganizationWithId(UUID id) throws OrganizationNotFoundException {
         return organizationRepository.findById(id).orElseThrow(() -> Exceptions.organizationNotFoundException(id));
+    }
+
+    @Override
+    public boolean isOrganizationFromRussia(UUID id) {
+        return organizationRepository.findById(id).isPresent();
     }
 }
