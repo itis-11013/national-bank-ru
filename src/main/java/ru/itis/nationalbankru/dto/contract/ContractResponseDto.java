@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.itis.nationalbankru.dto.AbstractResponse;
 import ru.itis.nationalbankru.entity.Organization;
-import ru.itis.nationalbankru.entity.Product;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author : Escalopa
@@ -19,10 +19,12 @@ import java.util.Date;
 @Getter
 @Setter
 public class ContractResponseDto extends AbstractResponse {
-    private Integer count;
+    private UUID inner_id;
     private Boolean isPaid;
     private Date paymentDate;
-    private Date deliveryDate;
+    private Integer count;
+    private Double unitPrice;
+    private UUID productInnerId;
+    private Organization seller;
     private Organization buyer;
-    private Product product;
 }

@@ -56,13 +56,14 @@ public class GeneralResponse<T> {
         fetch,
         fetched,
         ban,
-        banned
+        banned,
+        payed,
+        pay
     }
 
     public enum ResponseClass {
         organization,
         contract,
-        product,
         user,
     }
 
