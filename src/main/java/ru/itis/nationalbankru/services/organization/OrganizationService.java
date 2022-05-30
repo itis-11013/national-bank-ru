@@ -3,6 +3,7 @@ package ru.itis.nationalbankru.services.organization;
 import ru.itis.nationalbankru.dto.PageableDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
+import ru.itis.nationalbankru.entity.Organization;
 import ru.itis.nationalbankru.exceptions.OrganizationNotFoundException;
 
 import java.util.List;
@@ -17,10 +18,14 @@ public interface OrganizationService {
     OrganizationResponseDto createOrganization(OrganizationRequestDto organizationRequestDto);
 
     OrganizationResponseDto updateOrganizationWithId(UUID id, OrganizationRequestDto organizationRequestDto) throws OrganizationNotFoundException;
+
     OrganizationResponseDto getOrganizationWithId(UUID id) throws OrganizationNotFoundException;
 
     UUID deleteOrganizationWithId(UUID id);
 
     void banOrganizationWithId(UUID id) throws OrganizationNotFoundException;
 
+    Organization _getOrganizationWithId(UUID id) throws OrganizationNotFoundException;
+
+    boolean isOrganizationFromRussia(UUID id);
 }
