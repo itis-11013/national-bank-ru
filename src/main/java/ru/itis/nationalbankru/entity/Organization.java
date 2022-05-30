@@ -4,11 +4,11 @@ import lombok.*;
 import ru.itis.nationalbankru.entity.enums.Status;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,7 +22,7 @@ public class Organization extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "address", nullable = false)
+        @Column(name = "address", nullable = false)
     private String address;
 
     @Enumerated(EnumType.STRING)
@@ -38,4 +38,13 @@ public class Organization extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
+    private List<Contract> sellContracts;
+
+    @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
+    private List<Contract> buyContract;
+
+    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
+    private List<Product> products;
 }
