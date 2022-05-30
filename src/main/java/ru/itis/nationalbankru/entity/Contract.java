@@ -22,10 +22,10 @@ public class Contract extends AbstractEntity {
     @Column(name = "is_paid", nullable = false)
     private Boolean isPaid = false;
 
-    @Column(name = "payment_date", nullable = false, updatable = false)
+    @Column(name = "payment_date")
     private Date paymentDate;
 
-    @Column(name = "delivery_date", nullable = false, updatable = false)
+    @Column(name = "delivery_date")
     private Date deliveryDate;
 
     @ManyToOne
