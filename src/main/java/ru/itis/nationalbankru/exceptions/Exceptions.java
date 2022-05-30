@@ -17,17 +17,12 @@ public class Exceptions {
     public static ContractNotFoundException contractNotFoundException(UUID id) {
         return new ContractNotFoundException(id);
     }
-    
+
     public static NoSufficientFundException noSufficientFundException(
             String organization,
-            String product,
             Double price
     ) {
-        return new NoSufficientFundException(organization, product, price);
-    }
-
-    public static ExceedStockLimitException exceedStockLimitException(Integer requiredCount, Integer stockCount) {
-        return new ExceedStockLimitException(requiredCount, stockCount);
+        return new NoSufficientFundException(organization, price);
     }
 
     public static ContractIsPaidException contractIsPaidException(UUID uuid) {

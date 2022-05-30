@@ -8,11 +8,10 @@ package ru.itis.nationalbankru.exceptions;
 
 public class NoSufficientFundException extends Exception {
 
-    protected NoSufficientFundException(String organizationName, String productName, Double price) {
+    protected NoSufficientFundException(String organizationName, Double price) {
         super(String.format(
-                "Organization { %s } has less than { %s } RUBfunds to buy product { %s } not found",
+                "Organization { %s } has less than { %s } RUB to buy product",
                 organizationName,
-                productName,
                 price));
     }
 
