@@ -54,7 +54,9 @@ public class GeneralResponse<T> {
         delete,
         deleted,
         fetch,
-        fetched
+        fetched,
+        ban,
+        banned
     }
 
     public enum ResponseClass {
