@@ -16,13 +16,16 @@ import java.util.UUID;
 @Table(name = "organizations")
 public class Organization extends AbstractEntity {
 
+    @Builder.Default
+    private static final String country = "RU";
+
     @Column(name = "inner_id", nullable = false)
     private UUID inner_id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-        @Column(name = "address", nullable = false)
+    @Column(name = "address", nullable = false)
     private String address;
 
     @Enumerated(EnumType.STRING)
@@ -32,8 +35,8 @@ public class Organization extends AbstractEntity {
     @Column(name = "balance", nullable = false)
     private Double balance;
 
-    @Builder.Default
-    private static final String country = "RU";
+    @Column(name = "frozen_balance", nullable = false)
+    private Double frozenBalance;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -45,6 +48,4 @@ public class Organization extends AbstractEntity {
     @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
     private List<Contract> buyContract;
 
-    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
-    private List<Product> products;
 }
