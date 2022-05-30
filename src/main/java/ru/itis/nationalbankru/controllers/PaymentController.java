@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.itis.nationalbankru.dto.GeneralResponse;
 import ru.itis.nationalbankru.dto.contract.ContractResponseDto;
-import ru.itis.nationalbankru.services.contract.ContractService;
+import ru.itis.nationalbankru.services.payment.PaymentService;
 
 import java.util.UUID;
 
@@ -24,14 +24,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PaymentController {
 
-    private final ContractService contractService;
+    private final PaymentService paymentService;
 
     @PostMapping("/{id}")
     public ResponseEntity<GeneralResponse<ContractResponseDto>> createPayment(
             @PathVariable UUID id,
             RedirectAttributes redirectAttributes) {
         try {
-            ContractResponseDto contractResponseDto = contractService.submitContractAsPaidById(id);
+            ContractResponseDto contractResponseDto = paymentService.submitPayment(id);
             return new GeneralResponse<ContractResponseDto>().setSuccessResponse(
                     contractResponseDto,
                     GeneralResponse.ResponseDescription.payed,
