@@ -2,22 +2,22 @@ package ru.itis.nationalbankru.services.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import ru.itis.nationalbankru.dto.user.UserRequestDto;
 import ru.itis.nationalbankru.dto.user.UserResponseDto;
 import ru.itis.nationalbankru.entity.Role;
+import ru.itis.nationalbankru.entity.User;
 import ru.itis.nationalbankru.entity.enums.RoleName;
 import ru.itis.nationalbankru.entity.enums.Status;
-import ru.itis.nationalbankru.entity.User;
 import ru.itis.nationalbankru.exceptions.Exceptions;
+import ru.itis.nationalbankru.mappers.UserMapper;
 import ru.itis.nationalbankru.repositories.RoleRepository;
 import ru.itis.nationalbankru.repositories.UserRepository;
 
-import java.util.*;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +26,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
                 .passwordHash(passwordEncoder.encode(userRequestDto.getPassword()))
                 .build();
         userRepository.save(newUser);
-        return UserResponseDto.from(newUser);
+        return userMapper.toDto(newUser);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userRequestDto.getEmail());
         user.setPasswordHash(passwordEncoder.encode(userRequestDto.getPassword()));
         userRepository.save(user);
-        return UserResponseDto.from(user);
+        return userMapper.toDto(user);
     }
 
     @Override
