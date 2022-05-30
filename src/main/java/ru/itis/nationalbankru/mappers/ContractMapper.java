@@ -17,11 +17,11 @@ import java.util.List;
 @Mapper
 public interface ContractMapper extends EntityMapper<Contract, ContractRequestDto, ContractResponseDto> {
 
-    ContractResponseDto toDto(Contract user);
+    ContractResponseDto toDto(Contract contract);
 
-    List<ContractResponseDto> toDto(List<Contract> users);
+    List<ContractResponseDto> toDto(List<Contract> contracts);
 
-    Contract fromDto(ContractRequestDto userRequestDto);
+    Contract fromDto(ContractRequestDto contractRequestDto);
 
-    void updateFromDto(ContractRequestDto userRequestDto, @MappingTarget Contract user);
+    void updateFromDto(ContractRequestDto contractRequestDto, @MappingTarget Contract contract);
 }

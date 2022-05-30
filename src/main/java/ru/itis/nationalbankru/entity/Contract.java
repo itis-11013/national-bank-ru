@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,8 +16,8 @@ import java.util.Date;
 @Table(name = "contracts")
 public class Contract extends AbstractEntity {
 
-    @Column(name = "count", nullable = false)
-    private Integer count;
+    @Column(name = "inner_id", nullable = false)
+    private UUID inner_id;
 
     @Builder.Default
     @Column(name = "is_paid", nullable = false)
@@ -25,19 +26,24 @@ public class Contract extends AbstractEntity {
     @Column(name = "payment_date")
     private Date paymentDate;
 
-    @Column(name = "delivery_date")
-    private Date deliveryDate;
+    @Column(name = "count", nullable = false)
+    private Integer count;
+
+    @Column(name = "unit_price", nullable = false)
+    private Double unitPrice;
+
+    @Column(name = "product_inner_id")
+    private UUID productInnerId;
 
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private Organization buyer;
 
-
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Organization seller;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    public double getContractAmount() {
+        return this.getCount() * this.getUnitPrice();
+    }
 }
