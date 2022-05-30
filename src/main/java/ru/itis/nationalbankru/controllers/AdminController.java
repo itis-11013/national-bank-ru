@@ -24,7 +24,7 @@ public class AdminController {
     private final UserService userService;
     private final OrganizationService organizationService;
 
-    @GetMapping("/organization")
+    @GetMapping("/organization/")
     public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllOrganizations(
             @RequestBody PageableDto pageableDto,
             RedirectAttributes redirectAttributes) {

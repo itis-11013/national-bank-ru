@@ -25,7 +25,7 @@ public class OrganizationController {
     public final OrganizationService organizationService;
 
     @GetMapping("/")
-    public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllUserOrganizations(
+    public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllOrganizations(
             @RequestBody PageableDto pageableDto,
             RedirectAttributes redirectAttributes) {
         try {
