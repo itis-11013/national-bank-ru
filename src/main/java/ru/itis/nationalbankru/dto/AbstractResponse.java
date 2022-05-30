@@ -1,7 +1,8 @@
 package ru.itis.nationalbankru.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -13,9 +14,10 @@ import java.util.UUID;
  * @time : 09:29
  **/
 
-@Builder
 @Data
-public abstract class AbstractResponse {
+@NoArgsConstructor
+@AllArgsConstructor
+public class AbstractResponse {
     private UUID id;
     private Date createdAt;
     private LocalDateTime updatedAt;
