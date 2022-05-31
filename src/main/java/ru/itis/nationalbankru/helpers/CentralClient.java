@@ -17,7 +17,7 @@ public class CentralClient {
 
 
     @Value("${centralBankEndPoint}")
-    private final String centralBankEndPoint;
+    private String centralBankEndPoint;
 
     private final WebClient webClient = WebClient.create(centralBankEndPoint);
 

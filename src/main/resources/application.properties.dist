@@ -16,3 +16,6 @@ spring.flyway.schemas=public
 # Secrets
 # 10k as initial balance for organizations
 organizationBalanceInitAmount=
+
+# Central bank end point
+centralBankEndPoint=
