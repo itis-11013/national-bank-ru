@@ -2,6 +2,7 @@ package ru.itis.nationalbankru.controllers;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,12 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/organization")
 @RequiredArgsConstructor
+@Slf4j
 public class OrganizationController {
 
     public final OrganizationService organizationService;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllOrganizations(
             @RequestBody PageableDto pageableDto,
             RedirectAttributes redirectAttributes) {
@@ -62,7 +64,12 @@ public class OrganizationController {
         }
     }
 
-    @PostMapping("/new")
+    @GetMapping("/")
+    public String getCreateOrganizationForm() {
+        return "create_organization_page";
+    }
+
+    @PostMapping("/")
     public ResponseEntity<GeneralResponse<OrganizationResponseDto>> createOrganization(
             @RequestBody OrganizationRequestDto organizationRequestDto,
             RedirectAttributes redirectAttributes) {
@@ -73,6 +80,7 @@ public class OrganizationController {
                     ResponseDescription.deleted,
                     ResponseClass.organization);
         } catch (Exception exception) {
+            log.info(exception.getMessage());
             return new GeneralResponse<OrganizationResponseDto>().setFailureResponse(
                     redirectAttributes,
                     exception,
