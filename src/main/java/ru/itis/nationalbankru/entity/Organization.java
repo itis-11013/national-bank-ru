@@ -1,6 +1,7 @@
 package ru.itis.nationalbankru.entity;
 
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import ru.itis.nationalbankru.entity.enums.Status;
 
 import javax.persistence.*;
@@ -11,13 +12,13 @@ import java.util.UUID;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "organizations")
 public class Organization extends AbstractEntity {
 
-    @Builder.Default
-    private static final String country = "RU";
+    @Value("${organizationBalanceInitAmount}")
+    private static Double organizationBalanceInitAmount;
 
     @Column(name = "inner_id", nullable = false)
     private UUID inner_id;
@@ -33,10 +34,12 @@ public class Organization extends AbstractEntity {
     private Status status;
 
     @Column(name = "balance", nullable = false)
-    private Double balance;
+    @Builder.Default
+    private Double balance = organizationBalanceInitAmount;
 
     @Column(name = "frozen_balance", nullable = false)
-    private Double frozenBalance;
+    @Builder.Default
+    private Double frozenBalance = 0.0;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -3,6 +3,7 @@ package ru.itis.nationalbankru.services.contract;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.itis.nationalbankru.dto.central.CentralContractDto;
 import ru.itis.nationalbankru.dto.contract.ContractRequestDto;
 import ru.itis.nationalbankru.dto.contract.ContractResponseDto;
 import ru.itis.nationalbankru.entity.Contract;
@@ -14,6 +15,7 @@ import ru.itis.nationalbankru.exceptions.NoSufficientFundException;
 import ru.itis.nationalbankru.mappers.ContractMapper;
 import ru.itis.nationalbankru.repositories.ContractRepository;
 import ru.itis.nationalbankru.repositories.OrganizationRepository;
+import ru.itis.nationalbankru.services.central.CentralService;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
 
 import javax.transaction.Transactional;
@@ -35,6 +37,9 @@ public class ContractServiceImpl implements ContractService {
     private final OrganizationRepository organizationRepository;
     private final OrganizationService organizationService;
     private final ContractMapper contractMapper;
+    private final CentralService<ContractRequestDto, CentralContractDto> centralService;
+
+    private final String entityPath = "organization";
 
     @Override
     public ContractResponseDto createContract(ContractRequestDto contractRequestDto) throws NoSufficientFundException {
@@ -56,7 +61,9 @@ public class ContractServiceImpl implements ContractService {
                 this.freezeContractAmount(buyer, contract.getContractAmount());
         }
 
-        //TODO create contract on central bank using centralBankService
+        if (contract.getInner_id() == null) {
+            centralService.createEntity(entityPath, contractRequestDto);
+        }
 
         // Insert contract in database
         contract.setSeller(seller);
@@ -84,7 +91,8 @@ public class ContractServiceImpl implements ContractService {
             this.refundContractAmount(buyer, contract.getContractAmount());
         }
 
-        // TODO delete contract in central bank using centralBankService
+        // Delete contract in central service
+        centralService.deleteEntity(entityPath, id);
 
         contractRepository.delete(contract);
         return id;
