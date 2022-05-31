@@ -11,6 +11,7 @@ import ru.itis.nationalbankru.exceptions.ContractNotFoundException;
 import ru.itis.nationalbankru.exceptions.Exceptions;
 import ru.itis.nationalbankru.mappers.ContractMapper;
 import ru.itis.nationalbankru.repositories.ContractRepository;
+import ru.itis.nationalbankru.repositories.OrganizationRepository;
 import ru.itis.nationalbankru.services.contract.ContractService;
 
 import javax.transaction.Transactional;
@@ -30,6 +31,7 @@ import java.util.UUID;
 public class PaymentServiceImpl implements PaymentService {
 
     ContractRepository contractRepository;
+    OrganizationRepository organizationRepository;
     ContractMapper contractMapper;
 
     ContractService contractService;
@@ -44,15 +46,13 @@ public class PaymentServiceImpl implements PaymentService {
         // Set new buyer balance (withdraw money)
         Organization buyer = contract.getBuyer();
         if (buyer != null) {
-            double newFreezeBalance = buyer.getFrozenBalance() - contract.getContractAmount();
-            buyer.setFrozenBalance(newFreezeBalance);
+            organizationRepository.payContractFees(buyer.getId(), contract.getContractAmount());
         }
 
         // Set new seller balance (deposit money)
         Organization seller = contract.getSeller();
         if (seller != null) {
-            double newBalance = seller.getBalance() + contract.getContractAmount();
-            seller.setBalance(newBalance);
+            organizationRepository.depositContractFees(seller.getId(), contract.getContractAmount());
         }
 
         // Set contract as paid
