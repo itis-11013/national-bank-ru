@@ -13,4 +13,6 @@ public class OrganizationResponseDto extends AbstractResponse {
     String name;
     String address;
     Status status;
+    Double balance;
+    Double frozenBalance;
 }
