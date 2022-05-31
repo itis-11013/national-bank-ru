@@ -43,16 +43,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http
                 .authorizeRequests()
-                .antMatchers("/auth/*").permitAll()
-                .antMatchers("/").authenticated()
-                .antMatchers("/product/*").authenticated()
-                .antMatchers("/payment/*").authenticated()
-                .antMatchers("/contract/*").authenticated()
-                .antMatchers("/organization/*").authenticated()
-                .antMatchers("/user/*").authenticated()
-                .antMatchers("/admin/*").hasAuthority("ADMIN");
+                .antMatchers("/auth/*").permitAll();
+        //                .antMatchers("/").authenticated()
+        //                .antMatchers("/product/*").authenticated()
+        //                .antMatchers("/payment/*").authenticated()
+        //                .antMatchers("/contract/*").authenticated()
+        //                .antMatchers("/organization/*").authenticated()
+        //                .antMatchers("/user/*").authenticated()
+        //                .antMatchers("/admin/*").hasAuthority("ADMIN");
 
         http
                 .formLogin()
