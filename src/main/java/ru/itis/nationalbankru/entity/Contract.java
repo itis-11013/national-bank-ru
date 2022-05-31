@@ -32,9 +32,6 @@ public class Contract extends AbstractEntity {
     @Column(name = "unit_price", nullable = false)
     private Double unitPrice;
 
-    @Column(name = "product_inner_id")
-    private UUID productInnerId;
-
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private Organization buyer;

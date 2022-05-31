@@ -1,16 +1,15 @@
-CREATE TABLE contracts
+CREATE TABLE IF NOT EXISTS contracts
 (
-    id               UUID                        NOT NULL,
-    inner_id         UUID                        NOT NULL,
-    created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at       TIMESTAMP WITHOUT TIME ZONE,
-    is_paid          BOOLEAN                     NOT NULL,
-    payment_date     TIMESTAMP WITHOUT TIME ZONE,
-    count            INTEGER                     NOT NULL,
-    unit_price       double precision            NOT NULL,
-    product_inner_id UUID,
-    buyer_id         UUID,
-    seller_id        UUID,
+    id           UUID                        NOT NULL,
+    inner_id     UUID                        NOT NULL,
+    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at   TIMESTAMP WITHOUT TIME ZONE,
+    is_paid      BOOLEAN                     NOT NULL,
+    payment_date TIMESTAMP WITHOUT TIME ZONE,
+    count        INTEGER                     NOT NULL,
+    unit_price   double precision            NOT NULL,
+    buyer_id     UUID,
+    seller_id    UUID,
     CONSTRAINT pk_contracts PRIMARY KEY (id)
 );
 
