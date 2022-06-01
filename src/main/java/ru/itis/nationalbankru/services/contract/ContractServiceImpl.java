@@ -58,7 +58,7 @@ public class ContractServiceImpl implements ContractService {
                 throw Exceptions.noSufficientFundException(buyer.getName(), contract.getContractAmount());
             else
                 // Freeze contract amount to buyer
-                this.freezeContractAmount(buyer, contract.getContractAmount());
+                organizationRepository.freezeContractFees(buyer.getId(), contract.getContractAmount());
         }
 
         if (contract.getInner_id() == null) {
@@ -88,7 +88,7 @@ public class ContractServiceImpl implements ContractService {
         // Refund money to product buyer (if from russia)
         Organization buyer = contract.getBuyer();
         if (buyer != null) {
-            this.refundContractAmount(buyer, contract.getContractAmount());
+            organizationRepository.refundContractFees(buyer.getId(), contract.getContractAmount());
         }
 
         // Delete contract in central service
@@ -102,22 +102,4 @@ public class ContractServiceImpl implements ContractService {
     public Contract _getContractById(UUID id) throws ContractNotFoundException {
         return contractRepository.findById(id).orElseThrow(() -> Exceptions.contractNotFoundException(id));
     }
-
-    private void freezeContractAmount(Organization organization, Double contractAmount) {
-        double newOrganizationBalance = organization.getBalance() - contractAmount;
-        double newOrganizationFrozenBalance = organization.getFrozenBalance() + contractAmount;
-        this.setOrganizationBalanceState(organization, newOrganizationBalance, newOrganizationFrozenBalance);
-    }
-
-    private void refundContractAmount(Organization organization, Double contractAmount) {
-        double newOrganizationBalance = organization.getBalance() + contractAmount;
-        double newOrganizationFrozenBalance = organization.getFrozenBalance() - contractAmount;
-        this.setOrganizationBalanceState(organization, newOrganizationBalance, newOrganizationFrozenBalance);
-    }
-
-    private void setOrganizationBalanceState(Organization organization, Double balance, Double freezeBalance) {
-        organization.setBalance(balance);
-        organization.setFrozenBalance(freezeBalance);
-    }
-
 }

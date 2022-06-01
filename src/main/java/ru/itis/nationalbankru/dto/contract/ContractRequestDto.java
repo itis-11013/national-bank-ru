@@ -15,4 +15,5 @@ public class ContractRequestDto {
     private UUID productId;
     private UUID buyerId;
     private Integer count;
+    private Double price;
 }
