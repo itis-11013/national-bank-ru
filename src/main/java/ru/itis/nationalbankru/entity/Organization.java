@@ -51,4 +51,7 @@ public class Organization extends AbstractEntity {
     @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
     private List<Contract> buyContract;
 
+    @OneToMany
+    private List<Product> products;
+
 }
