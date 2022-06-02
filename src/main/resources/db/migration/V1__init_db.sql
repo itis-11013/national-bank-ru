@@ -22,46 +22,33 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
---
--- TOC entry 212 (class 1259 OID 18843)
--- Name: accounts; Type: TABLE; Schema: public; Owner: postgres
---
 
-CREATE TABLE public.accounts
+------------------------------<     TABLES CREATION     >------------------------------
+
+CREATE TABLE public.audits
 (
-    id            bigint                      NOT NULL,
-    created_at    timestamp without time zone NOT NULL,
-    updated_at    timestamp without time zone,
-    email         character varying(255)      NOT NULL,
-    password_hash character varying(255)      NOT NULL,
-    status        character varying(255)      NOT NULL
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    created_by BIGINT,
+    updated_by BIGINT,
+    CONSTRAINT pk_audits PRIMARY KEY (id)
+);
+
+ALTER TABLE public.audits
+    OWNER TO postgres;
+
+CREATE TABLE public.organizations_roles
+(
+    organization_id bigint NOT NULL,
+    roles_id        bigint NOT NULL
 );
 
 
-ALTER TABLE public.accounts
+ALTER TABLE public.organizations_roles
     OWNER TO postgres;
 
---
--- TOC entry 213 (class 1259 OID 18850)
--- Name: accounts_roles; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.accounts_roles
-(
-    user_id  bigint NOT NULL,
-    roles_id bigint NOT NULL
-);
-
-
-ALTER TABLE public.accounts_roles
-    OWNER TO postgres;
-
---
--- TOC entry 209 (class 1259 OID 18678)
--- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.hibernate_sequence
+CREATE SEQUENCE IF NOT EXISTS public.hibernate_sequence
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -72,31 +59,24 @@ CREATE SEQUENCE public.hibernate_sequence
 ALTER TABLE public.hibernate_sequence
     OWNER TO postgres;
 
---
--- TOC entry 214 (class 1259 OID 18853)
--- Name: organizations; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.organizations
 (
-    id         bigint                      NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone,
-    address    character varying(255)      NOT NULL,
-    inner_id   uuid                        NOT NULL,
-    name       character varying(255)      NOT NULL,
-    status     character varying(255)      NOT NULL,
-    user_id    bigint
+    id             BIGINT           NOT NULL,
+    audit_id       BIGINT           NOT NULL,
+    name           VARCHAR(255)     NOT NULL,
+    address        VARCHAR(255)     NOT NULL,
+    password_hash  VARCHAR(255)     NOT NULL,
+    status         VARCHAR(255)     NOT NULL,
+    inner_id       UUID             NOT NULL,
+    balance        DOUBLE PRECISION NOT NULL,
+    frozen_balance DOUBLE PRECISION NOT NULL,
+    CONSTRAINT pk_organizations PRIMARY KEY (id)
 );
-
 
 ALTER TABLE public.organizations
     OWNER TO postgres;
 
---
--- TOC entry 211 (class 1259 OID 18838)
--- Name: persistent_logins; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.persistent_logins
 (
@@ -110,105 +90,54 @@ CREATE TABLE public.persistent_logins
 ALTER TABLE public.persistent_logins
     OWNER TO postgres;
 
---
--- TOC entry 215 (class 1259 OID 18860)
--- Name: roles; Type: TABLE; Schema: public; Owner: postgres
---
-
 CREATE TABLE public.roles
 (
-    id         bigint                        NOT NULL,
-    created_at timestamp without time zone   NOT NULL,
-    updated_at timestamp without time zone,
-    name       character varying(255) unique NOT NULL
+    id   BIGINT       NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    CONSTRAINT pk_roles PRIMARY KEY (id)
 );
 
 
 ALTER TABLE public.roles
     OWNER TO postgres;
 
---
--- TOC entry 3199 (class 2606 OID 18849)
--- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+------------------------------<     CONSTRAINTS CREATION     >------------------------------
 
-ALTER TABLE ONLY public.accounts
-    ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
-
---
--- TOC entry 3203 (class 2606 OID 18859)
--- Name: organizations organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.organizations
-    ADD CONSTRAINT organizations_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 3197 (class 2606 OID 18842)
--- Name: persistent_logins persistent_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+-- PERSISTENCE LOGIN
 
 ALTER TABLE ONLY public.persistent_logins
     ADD CONSTRAINT persistent_logins_pkey PRIMARY KEY (series);
 
+-- AUDITS
 
---
--- TOC entry 3205 (class 2606 OID 18864)
--- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+ALTER TABLE public.audits
+    ADD CONSTRAINT FK_AUDITS_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES public.organizations (id);
 
-ALTER TABLE ONLY public.roles
-    ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
+ALTER TABLE public.audits
+    ADD CONSTRAINT FK_AUDITS_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES public.organizations (id);
 
+-- ROLES
 
---
--- TOC entry 3201 (class 2606 OID 18866)
--- Name: accounts uk_n7ihswpy07ci568w34q0oi8he; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+ALTER TABLE public.roles
+    ADD CONSTRAINT uc_roles_name UNIQUE (name);
 
-ALTER TABLE ONLY public.accounts
-    ADD CONSTRAINT uk_n7ihswpy07ci568w34q0oi8he UNIQUE (email);
+-- ORGANIZATIONS
 
+ALTER TABLE public.organizations
+    ADD CONSTRAINT uc_organizations_audit UNIQUE (audit_id);
 
---
--- TOC entry 3208 (class 2606 OID 18877)
--- Name: organizations fk5rjjflmlyyuw2sgg2pqy2v4qt; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
+ALTER TABLE public.organizations
+    ADD CONSTRAINT uc_organizations_inner UNIQUE (inner_id);
 
-ALTER TABLE ONLY public.organizations
-    ADD CONSTRAINT fk5rjjflmlyyuw2sgg2pqy2v4qt FOREIGN KEY (user_id) REFERENCES public.accounts (id);
+ALTER TABLE public.organizations
+    ADD CONSTRAINT uc_organizations_name UNIQUE (name);
 
-
---
--- TOC entry 3206 (class 2606 OID 18867)
--- Name: accounts_roles fkg50bsugfce90c8wcshcj2k95m; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.accounts_roles
-    ADD CONSTRAINT fkg50bsugfce90c8wcshcj2k95m FOREIGN KEY (roles_id) REFERENCES public.roles (id);
+ALTER TABLE public.organizations
+    ADD CONSTRAINT FK_ORGANIZATIONS_ON_AUDIT FOREIGN KEY (audit_id) REFERENCES public.audits (id);
 
 
---
--- TOC entry 3209 (class 2606 OID 18882)
--- Name: organizations fki8dxpcmdwugbggd2ooyddjtda; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
+ALTER TABLE ONLY public.organizations_roles
+    ADD CONSTRAINT FK_ROLE FOREIGN KEY (roles_id) REFERENCES public.roles (id);
 
-ALTER TABLE ONLY public.organizations
-    ADD CONSTRAINT fki8dxpcmdwugbggd2ooyddjtda FOREIGN KEY (id) REFERENCES public.accounts (id);
-
-
---
--- TOC entry 3207 (class 2606 OID 18872)
--- Name: accounts_roles fktgl0qa6lj8rr4aulbt1n4yl2h; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.accounts_roles
-    ADD CONSTRAINT fktgl0qa6lj8rr4aulbt1n4yl2h FOREIGN KEY (user_id) REFERENCES public.accounts (id);
-
-
--- Completed on 2022-05-28 13:54:22 MSK
-
---
--- PostgreSQL database dump complete
---
+ALTER TABLE ONLY public.organizations_roles
+    ADD CONSTRAINT FK_ORGANIZTION FOREIGN KEY (organization_id) REFERENCES public.organizations (id);
