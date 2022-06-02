@@ -13,7 +13,6 @@ import java.util.UUID;
 @Data
 public class ContractRequestDto {
     private UUID productId;
-    private UUID buyerId;
-    private Integer count;
-    private Double price;
+    private double count;
+    private UUID sellerId;
 }
