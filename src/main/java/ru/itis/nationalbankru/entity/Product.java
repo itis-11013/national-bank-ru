@@ -1,44 +1,51 @@
 package ru.itis.nationalbankru.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import java.util.List;
 import java.util.UUID;
 
-/**
- * @author : Escalopa
- * @created : 02.06.2022, Thu
- * @time : 06:47
- **/
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 @Setter
-@RequiredArgsConstructor
-@AllArgsConstructor
-@Builder(toBuilder = true)
 @Entity
 @Table(name = "products")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Product extends AbstractEntity {
 
-    @Column(name = "code", nullable = false)
-    private String code;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "inner_id", nullable = false)
-    @JsonProperty(value = "productid")
+    @Column(name = "inner_id")
     private UUID innerId;
 
-    @Column(name = "count", nullable = false)
+    @Column(name = "name")
+    private String name;
+
+    @Min(1)
+    @Column(name = "price")
+    private double price;
+
+    @Min(1)
+    @Column(name = "count")
     private double count;
 
-    @Column(name = "price", nullable = false)
-    private double price;
+    @Builder.Default
+    private double frozenCount = 0;
+
+    @ManyToOne
+    @JoinColumn(name = "unit_id")
+    private Unit unit;
 
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Organization seller;
 
+    @ManyToOne
+    @JoinColumn(name = "catalog_id")
+    private ProductCatalog catalog;
+
+    @OneToMany(mappedBy = "product")
+    private List<Contract> contracts;
 }
