@@ -1,24 +1,22 @@
 package ru.itis.nationalbankru.controllers;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.itis.nationalbankru.dto.user.UserRequestDto;
-import ru.itis.nationalbankru.services.user.UserServiceImpl;
+import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
+import ru.itis.nationalbankru.services.organization.OrganizationService;
 
 @Controller
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 @Slf4j
 public class AuthenticationController {
 
-    private final UserServiceImpl userService;
-
-    public AuthenticationController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
+    private final OrganizationService organizationService;
 
     @GetMapping("/signIn")
     public String getSignInPage() {
@@ -31,9 +29,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signUp")
-    public String signUp(UserRequestDto userRequestDto, RedirectAttributes redirectAttributes) {
+    public String signUp(OrganizationRequestDto organizationRequestDto, RedirectAttributes redirectAttributes) {
         try {
-            userService.createUser(userRequestDto);
+            organizationService.createOrganization(organizationRequestDto);
             return "redirect:/auth/signIn";
         } catch (Exception e) {
             log.error(e.getMessage());
