@@ -10,7 +10,7 @@ public class Exceptions {
         return new UsernameNotFoundException(String.format("User with id %s was not found", id));
     }
 
-    public static OrganizationNotFoundException organizationNotFoundException(UUID id) {
+    public static OrganizationNotFoundException organizationNotFoundException(Long id) {
         return new OrganizationNotFoundException(id);
     }
 
