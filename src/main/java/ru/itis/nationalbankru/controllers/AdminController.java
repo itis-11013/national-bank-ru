@@ -45,7 +45,7 @@ public class AdminController {
             @PathVariable Long id,
             RedirectAttributes redirectAttributes) {
         try {
-            organizationService.banOrganizationWithId(id);
+            organizationService.banOrganizationById(id);
             return new GeneralResponse<Long>().setSuccessResponse(
                     id,
                     ResponseDescription.banned,

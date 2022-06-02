@@ -27,7 +27,7 @@ public class OrganizationController {
             @PathVariable Long id,
             RedirectAttributes redirectAttributes) {
         try {
-            OrganizationResponseDto organizationResponseDto = organizationService.getOrganizationWithId(id);
+            OrganizationResponseDto organizationResponseDto = organizationService.getOrganizationById(id);
             return new GeneralResponse<OrganizationResponseDto>().setSuccessResponse(
                     organizationResponseDto,
                     ResponseDescription.deleted,
@@ -72,7 +72,7 @@ public class OrganizationController {
             OrganizationRequestDto organizationRequestDto,
             RedirectAttributes redirectAttributes) {
         try {
-            OrganizationResponseDto organizationResponseDto = organizationService.updateOrganizationWithId(
+            OrganizationResponseDto organizationResponseDto = organizationService.updateOrganizationById(
                     id,
                     organizationRequestDto);
             return new GeneralResponse<OrganizationResponseDto>().setSuccessResponse(
@@ -93,7 +93,7 @@ public class OrganizationController {
             @PathVariable Long id,
             RedirectAttributes redirectAttributes) {
         try {
-            Long idResponse = organizationService.deleteOrganizationWithId(id);
+            Long idResponse = organizationService.deleteOrganizationById(id);
             return new GeneralResponse<Long>().setSuccessResponse(
                     idResponse,
                     ResponseDescription.deleted,
