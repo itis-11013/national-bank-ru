@@ -4,20 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import ru.itis.nationalbankru.entity.User;
-import ru.itis.nationalbankru.exceptions.Exceptions;
-import ru.itis.nationalbankru.repositories.UserRepository;
+import ru.itis.nationalbankru.entity.Organization;
+import ru.itis.nationalbankru.repositories.OrganizationRepository;
+
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 
 
 @Component
 @RequiredArgsConstructor
-public class UserHelper {
-    private final UserRepository userRepository;
+public class OrganizationHelper {
+    private final OrganizationRepository organizationRepository;
 
-    public User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository
-                .findByEmail((String) auth.getPrincipal())
-                .orElseThrow(() -> Exceptions.usernameNotFoundException(null));
+    public Organization getCurrentOrganization() throws UserPrincipalNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String principal = (String) authentication.getPrincipal();
+        return organizationRepository
+                .findByName(principal)
+                .orElseThrow(() -> new UserPrincipalNotFoundException(principal));
     }
 }
