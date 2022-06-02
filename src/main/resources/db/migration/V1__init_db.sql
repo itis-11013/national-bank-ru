@@ -27,30 +27,34 @@ SET default_table_access_method = heap;
 -- Name: accounts; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.accounts (
-                                 id uuid NOT NULL,
-                                 created_at timestamp without time zone NOT NULL,
-                                 updated_at timestamp without time zone,
-                                 email character varying(255) NOT NULL,
-                                 password_hash character varying(255) NOT NULL,
-                                 status character varying(255) NOT NULL
+CREATE TABLE public.accounts
+(
+    id            bigint                      NOT NULL,
+    created_at    timestamp without time zone NOT NULL,
+    updated_at    timestamp without time zone,
+    email         character varying(255)      NOT NULL,
+    password_hash character varying(255)      NOT NULL,
+    status        character varying(255)      NOT NULL
 );
 
 
-ALTER TABLE public.accounts OWNER TO postgres;
+ALTER TABLE public.accounts
+    OWNER TO postgres;
 
 --
 -- TOC entry 213 (class 1259 OID 18850)
 -- Name: accounts_roles; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.accounts_roles (
-                                       user_id uuid NOT NULL,
-                                       roles_id uuid NOT NULL
+CREATE TABLE public.accounts_roles
+(
+    user_id  bigint NOT NULL,
+    roles_id bigint NOT NULL
 );
 
 
-ALTER TABLE public.accounts_roles OWNER TO postgres;
+ALTER TABLE public.accounts_roles
+    OWNER TO postgres;
 
 --
 -- TOC entry 209 (class 1259 OID 18678)
@@ -65,56 +69,63 @@ CREATE SEQUENCE public.hibernate_sequence
     CACHE 1;
 
 
-ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+ALTER TABLE public.hibernate_sequence
+    OWNER TO postgres;
 
 --
 -- TOC entry 214 (class 1259 OID 18853)
 -- Name: organizations; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.organizations (
-                                      id uuid NOT NULL,
-                                      created_at timestamp without time zone NOT NULL,
-                                      updated_at timestamp without time zone,
-                                      address character varying(255) NOT NULL,
-                                      inner_id uuid NOT NULL,
-                                      name character varying(255) NOT NULL,
-                                      status character varying(255) NOT NULL,
-                                      user_id uuid
+CREATE TABLE public.organizations
+(
+    id         bigint                      NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone,
+    address    character varying(255)      NOT NULL,
+    inner_id   uuid                        NOT NULL,
+    name       character varying(255)      NOT NULL,
+    status     character varying(255)      NOT NULL,
+    user_id    bigint
 );
 
 
-ALTER TABLE public.organizations OWNER TO postgres;
+ALTER TABLE public.organizations
+    OWNER TO postgres;
 
 --
 -- TOC entry 211 (class 1259 OID 18838)
 -- Name: persistent_logins; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.persistent_logins (
-                                          username character varying(64) NOT NULL,
-                                          series character varying(64) NOT NULL,
-                                          token character varying(64) NOT NULL,
-                                          last_used timestamp without time zone NOT NULL
+CREATE TABLE public.persistent_logins
+(
+    username  character varying(64)       NOT NULL,
+    series    character varying(64)       NOT NULL,
+    token     character varying(64)       NOT NULL,
+    last_used timestamp without time zone NOT NULL
 );
 
 
-ALTER TABLE public.persistent_logins OWNER TO postgres;
+ALTER TABLE public.persistent_logins
+    OWNER TO postgres;
 
 --
 -- TOC entry 215 (class 1259 OID 18860)
 -- Name: roles; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.roles (
-                              id uuid NOT NULL,
-                              created_at timestamp without time zone NOT NULL,
-                              updated_at timestamp without time zone,
-                              name character varying(255) unique NOT NULL
+CREATE TABLE public.roles
+(
+    id         bigint                        NOT NULL,
+    created_at timestamp without time zone   NOT NULL,
+    updated_at timestamp without time zone,
+    name       character varying(255) unique NOT NULL
 );
 
 
-ALTER TABLE public.roles OWNER TO postgres;
+ALTER TABLE public.roles
+    OWNER TO postgres;
 
 --
 -- TOC entry 3199 (class 2606 OID 18849)
@@ -166,7 +177,7 @@ ALTER TABLE ONLY public.accounts
 --
 
 ALTER TABLE ONLY public.organizations
-    ADD CONSTRAINT fk5rjjflmlyyuw2sgg2pqy2v4qt FOREIGN KEY (user_id) REFERENCES public.accounts(id);
+    ADD CONSTRAINT fk5rjjflmlyyuw2sgg2pqy2v4qt FOREIGN KEY (user_id) REFERENCES public.accounts (id);
 
 
 --
@@ -175,7 +186,7 @@ ALTER TABLE ONLY public.organizations
 --
 
 ALTER TABLE ONLY public.accounts_roles
-    ADD CONSTRAINT fkg50bsugfce90c8wcshcj2k95m FOREIGN KEY (roles_id) REFERENCES public.roles(id);
+    ADD CONSTRAINT fkg50bsugfce90c8wcshcj2k95m FOREIGN KEY (roles_id) REFERENCES public.roles (id);
 
 
 --
@@ -184,7 +195,7 @@ ALTER TABLE ONLY public.accounts_roles
 --
 
 ALTER TABLE ONLY public.organizations
-    ADD CONSTRAINT fki8dxpcmdwugbggd2ooyddjtda FOREIGN KEY (id) REFERENCES public.accounts(id);
+    ADD CONSTRAINT fki8dxpcmdwugbggd2ooyddjtda FOREIGN KEY (id) REFERENCES public.accounts (id);
 
 
 --
@@ -193,7 +204,7 @@ ALTER TABLE ONLY public.organizations
 --
 
 ALTER TABLE ONLY public.accounts_roles
-    ADD CONSTRAINT fktgl0qa6lj8rr4aulbt1n4yl2h FOREIGN KEY (user_id) REFERENCES public.accounts(id);
+    ADD CONSTRAINT fktgl0qa6lj8rr4aulbt1n4yl2h FOREIGN KEY (user_id) REFERENCES public.accounts (id);
 
 
 -- Completed on 2022-05-28 13:54:22 MSK

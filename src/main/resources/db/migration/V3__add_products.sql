@@ -1,3 +1,13 @@
+CREATE TABLE units
+(
+    id         UUID                        NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    code       BIGINT,
+    name       VARCHAR(255),
+    CONSTRAINT pk_units PRIMARY KEY (id)
+);
+
 CREATE TABLE products
 (
     id         UUID                        NOT NULL,
@@ -11,6 +21,10 @@ CREATE TABLE products
     seller_id  UUID,
     CONSTRAINT pk_products PRIMARY KEY (id)
 );
+
+
+ALTER TABLE contracts
+    ADD CONSTRAINT FK_CONTRACTS_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES products (id);
 
 ALTER TABLE products
     ADD CONSTRAINT FK_PRODUCTS_ON_SELLER FOREIGN KEY (seller_id) REFERENCES organizations (id);
