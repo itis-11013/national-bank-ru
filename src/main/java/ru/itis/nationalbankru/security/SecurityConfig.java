@@ -50,14 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/auth/*").permitAll();
-        //                .antMatchers("/").authenticated()
-        //                .antMatchers("/product/*").authenticated()
-        //                .antMatchers("/payment/*").authenticated()
-        //                .antMatchers("/contract/*").authenticated()
-        //                .antMatchers("/organization/*").authenticated()
-        //                .antMatchers("/user/*").authenticated()
-        //                .antMatchers("/admin/*").hasAuthority("ADMIN");
+        http.authorizeRequests()
+                .antMatchers("/").authenticated()
+                .antMatchers("/admin/*").hasAuthority("ADMIN");
 
         http.formLogin().loginPage("/auth/signIn").usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/").failureUrl("/auth/signIn?error");
 
@@ -73,6 +68,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
 
     @Override
     public Optional<Organization> getCurrentAuditor() {
-        return Optional.ofNullable(SecurityContextHolder.getContext()).map(SecurityContext::getAuthentication).filter(Authentication::isAuthenticated).map(Authentication::getPrincipal).map(Organization.class::cast);
+        return Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .filter(Authentication::isAuthenticated)
+                .map(Authentication::getPrincipal)
+                .map(Organization.class::cast);
     }
 }
