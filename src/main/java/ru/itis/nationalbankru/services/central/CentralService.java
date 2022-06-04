@@ -1,7 +1,5 @@
 package ru.itis.nationalbankru.services.central;
 
-import ru.itis.nationalbankru.dto.central.CentralResponse;
-
 import java.util.UUID;
 
 /**
@@ -15,7 +13,7 @@ public interface CentralService<T, E> {
 
     void updateEntity(String requestPath, UUID uuid, T data);
 
-    CentralResponse<E> getEntity(String requestPath, UUID uuid);
+    E getEntity(String requestPath, UUID uuid);
 
     void deleteEntity(String requestPath, UUID uuid);
 }
