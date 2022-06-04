@@ -9,7 +9,6 @@ CREATE TABLE units
 CREATE TABLE products
 (
     id           BIGINT NOT NULL,
-    audit_id     BIGINT NOT NULL,
     inner_id     UUID,
     name         VARCHAR(255),
     price        DOUBLE PRECISION,
@@ -28,12 +27,6 @@ CREATE TABLE product_catalog
     name VARCHAR(255),
     CONSTRAINT pk_product_catalog PRIMARY KEY (id)
 );
-
-ALTER TABLE products
-    ADD CONSTRAINT uc_products_audit UNIQUE (audit_id);
-
-ALTER TABLE products
-    ADD CONSTRAINT FK_PRODUCTS_ON_AUDIT FOREIGN KEY (audit_id) REFERENCES audits (id);
 
 ALTER TABLE products
     ADD CONSTRAINT FK_PRODUCTS_ON_CATALOG FOREIGN KEY (catalog_id) REFERENCES product_catalog (id);

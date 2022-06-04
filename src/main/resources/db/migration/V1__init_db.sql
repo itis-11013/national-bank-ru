@@ -25,18 +25,6 @@ SET default_table_access_method = heap;
 
 ------------------------------<     TABLES CREATION     >------------------------------
 
-CREATE TABLE public.audits
-(
-    id         BIGINT                      NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    created_by BIGINT,
-    updated_by BIGINT,
-    CONSTRAINT pk_audits PRIMARY KEY (id)
-);
-
-ALTER TABLE public.audits
-    OWNER TO postgres;
 
 CREATE TABLE public.organizations_roles
 (
@@ -63,7 +51,6 @@ ALTER TABLE public.hibernate_sequence
 CREATE TABLE public.organizations
 (
     id             BIGINT           NOT NULL,
-    audit_id       BIGINT           NOT NULL,
     name           VARCHAR(255)     NOT NULL,
     address        VARCHAR(255)     NOT NULL,
     password_hash  VARCHAR(255)     NOT NULL,
@@ -110,12 +97,6 @@ ALTER TABLE ONLY public.persistent_logins
 
 -- AUDITS
 
-ALTER TABLE public.audits
-    ADD CONSTRAINT FK_AUDITS_ON_CREATED_BY FOREIGN KEY (created_by) REFERENCES public.organizations (id);
-
-ALTER TABLE public.audits
-    ADD CONSTRAINT FK_AUDITS_ON_UPDATED_BY FOREIGN KEY (updated_by) REFERENCES public.organizations (id);
-
 -- ROLES
 
 ALTER TABLE public.roles
@@ -123,8 +104,6 @@ ALTER TABLE public.roles
 
 -- ORGANIZATIONS
 
-ALTER TABLE public.organizations
-    ADD CONSTRAINT uc_organizations_audit UNIQUE (audit_id);
 
 ALTER TABLE public.organizations
     ADD CONSTRAINT uc_organizations_inner UNIQUE (inner_id);
@@ -132,12 +111,9 @@ ALTER TABLE public.organizations
 ALTER TABLE public.organizations
     ADD CONSTRAINT uc_organizations_name UNIQUE (name);
 
-ALTER TABLE public.organizations
-    ADD CONSTRAINT FK_ORGANIZATIONS_ON_AUDIT FOREIGN KEY (audit_id) REFERENCES public.audits (id);
-
 
 ALTER TABLE ONLY public.organizations_roles
     ADD CONSTRAINT FK_ROLE FOREIGN KEY (roles_id) REFERENCES public.roles (id);
 
 ALTER TABLE ONLY public.organizations_roles
-    ADD CONSTRAINT FK_ORGANIZTION FOREIGN KEY (organization_id) REFERENCES public.organizations (id);
+    ADD CONSTRAINT FK_ORGANIZATION FOREIGN KEY (organization_id) REFERENCES public.organizations (id);

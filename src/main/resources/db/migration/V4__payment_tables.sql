@@ -1,7 +1,6 @@
 CREATE TABLE contracts
 (
     id           BIGINT  NOT NULL,
-    audit_id     BIGINT  NOT NULL,
     inner_id     UUID    NOT NULL,
     is_paid      BOOLEAN NOT NULL,
     payment_date TIMESTAMP WITHOUT TIME ZONE,
@@ -11,12 +10,6 @@ CREATE TABLE contracts
     seller_id    BIGINT,
     CONSTRAINT pk_contracts PRIMARY KEY (id)
 );
-
-ALTER TABLE contracts
-    ADD CONSTRAINT uc_contracts_audit UNIQUE (audit_id);
-
-ALTER TABLE contracts
-    ADD CONSTRAINT FK_CONTRACTS_ON_AUDIT FOREIGN KEY (audit_id) REFERENCES audits (id);
 
 ALTER TABLE contracts
     ADD CONSTRAINT FK_CONTRACTS_ON_BUYER FOREIGN KEY (buyer_id) REFERENCES organizations (id);
