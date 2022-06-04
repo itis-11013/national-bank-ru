@@ -15,6 +15,8 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
 
     Optional<Organization> findByName(String name);
 
+    Organization getByName(String name);
+
     Optional<Organization> findOrganizationsByInnerId(UUID uuid);
 
     @Modifying(flushAutomatically = true)
