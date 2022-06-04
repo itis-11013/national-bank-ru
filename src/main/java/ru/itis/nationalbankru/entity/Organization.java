@@ -1,11 +1,9 @@
 package ru.itis.nationalbankru.entity;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 import ru.itis.nationalbankru.entity.enums.Status;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,12 +16,9 @@ import java.util.UUID;
 @Table(name = "organizations")
 public class Organization extends AbstractEntity {
 
-    @Value("${organizationBalanceInitAmount}")
-    private static Double organizationBalanceInitAmount;
-    @ManyToMany(fetch = FetchType.LAZY)
-
-    @JoinColumn(name = "id")
-    List<Role> roles = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "organizations_roles")
+    List<Role> roles;
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
@@ -42,8 +37,7 @@ public class Organization extends AbstractEntity {
     private UUID innerId;
 
     @Column(name = "balance", nullable = false)
-    @Builder.Default
-    private Double balance = organizationBalanceInitAmount;
+    private Double balance;
 
     @Column(name = "frozen_balance", nullable = false)
     @Builder.Default

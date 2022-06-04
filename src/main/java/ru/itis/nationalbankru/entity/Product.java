@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @Entity
@@ -48,4 +48,5 @@ public class Product extends AbstractEntity {
 
     @OneToMany(mappedBy = "product")
     private List<Contract> contracts;
+    
 }
