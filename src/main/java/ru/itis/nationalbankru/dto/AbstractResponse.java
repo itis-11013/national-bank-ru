@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * @author : Escalopa
@@ -18,7 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AbstractResponse {
-    private UUID id;
+    private Long id;
     private Date createdAt;
     private LocalDateTime updatedAt;
+    //    private AuditResponse audit;
 }

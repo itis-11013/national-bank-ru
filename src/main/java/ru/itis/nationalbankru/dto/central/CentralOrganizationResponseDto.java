@@ -1,8 +1,10 @@
 package ru.itis.nationalbankru.dto.central;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
@@ -14,9 +16,9 @@ import java.util.UUID;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CentralOrganizationResponseDto {
-    String name;
-    String address;
     @JsonProperty("innerid")
     UUID innerId;
     @JsonProperty("country_code")
