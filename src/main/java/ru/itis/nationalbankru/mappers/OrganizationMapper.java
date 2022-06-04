@@ -6,9 +6,12 @@ import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.entity.Organization;
 
+import javax.persistence.MappedSuperclass;
 import java.util.List;
 
+//@Mapper(uses = AuditMapper.class, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 @Mapper
+@MappedSuperclass
 public interface OrganizationMapper extends EntityMapper<Organization, OrganizationRequestDto, OrganizationResponseDto> {
 
     OrganizationResponseDto toDto(Organization organization);
