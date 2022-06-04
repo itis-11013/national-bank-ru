@@ -3,31 +3,25 @@ package ru.itis.nationalbankru.security;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.itis.nationalbankru.entity.Organization;
 import ru.itis.nationalbankru.security.details.UserDetailsServiceImpl;
 
 import javax.sql.DataSource;
-import java.util.Optional;
 
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter implements AuditorAware<Organization> {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
 
@@ -36,7 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
     @Qualifier("customUserDetailsService")
     private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder, DataSource dataSource, UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(PasswordEncoder passwordEncoder,
+                          DataSource dataSource,
+                          UserDetailsServiceImpl userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
         this.userDetailsService = userDetailsService;
@@ -54,9 +50,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
                 .antMatchers("/").authenticated()
                 .antMatchers("/admin/*").hasAuthority("ADMIN");
 
-        http.formLogin().loginPage("/auth/signIn").usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/").failureUrl("/auth/signIn?error");
+        http.formLogin()
+                .loginPage("/auth/signIn")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/")
+                .failureUrl("/auth/signIn?error");
 
-        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET")).invalidateHttpSession(true).deleteCookies("JSESSIONID");
+        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET"))
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
     }
 
     @Bean
@@ -66,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
         return jdbcTokenRepository;
     }
 
+/*
     @Override
     public Optional<Organization> getCurrentAuditor() {
         return Optional.ofNullable(SecurityContextHolder.getContext())
@@ -74,4 +78,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Audi
                 .map(Authentication::getPrincipal)
                 .map(Organization.class::cast);
     }
+ **/
 }
