@@ -1,5 +1,6 @@
 package ru.itis.nationalbankru.security.details;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,16 +14,12 @@ import ru.itis.nationalbankru.repositories.RoleRepository;
 import java.util.List;
 
 @Component("customUserDetailsService")
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final OrganizationRepository organizationRepository;
 
     private final RoleRepository roleRepository;
-
-    public UserDetailsServiceImpl(OrganizationRepository organizationRepository, RoleRepository roleRepository) {
-        this.organizationRepository = organizationRepository;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     @Transactional
