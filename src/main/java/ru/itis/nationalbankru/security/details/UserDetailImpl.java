@@ -40,6 +40,10 @@ public class UserDetailImpl implements UserDetails {
         return false;
     }
 
+    public Long getId() {
+        return this.organization.getId();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
