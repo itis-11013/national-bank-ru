@@ -1,9 +1,12 @@
 package ru.itis.nationalbankru.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import ru.itis.nationalbankru.entity.Organization;
 import ru.itis.nationalbankru.entity.Product;
 
 import java.util.Optional;
@@ -17,6 +20,8 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Product findProductByInnerId(UUID uuid);
+
+    Page<Product> findProductBySeller(Organization seller, Pageable pageable);
 
     Optional<Product> findProductByNameAndSellerId(String name, Long id);
 
