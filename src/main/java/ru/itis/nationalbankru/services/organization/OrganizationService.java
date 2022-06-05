@@ -4,6 +4,7 @@ import ru.itis.nationalbankru.dto.PageableDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.entity.Organization;
+import ru.itis.nationalbankru.exceptions.CentralResponseException;
 import ru.itis.nationalbankru.exceptions.OrganizationNotFoundException;
 
 import java.util.List;
@@ -11,21 +12,21 @@ import java.util.UUID;
 
 public interface OrganizationService {
 
-    List<OrganizationResponseDto> getAllUserOrganization(PageableDto pageableDto);
-
     List<OrganizationResponseDto> getAllOrganization(PageableDto pageableDto);
 
-    OrganizationResponseDto createOrganization(OrganizationRequestDto organizationRequestDto);
+    OrganizationResponseDto createOrganization(OrganizationRequestDto organizationRequestDto) throws CentralResponseException;
 
-    OrganizationResponseDto updateOrganizationWithId(UUID id, OrganizationRequestDto organizationRequestDto) throws OrganizationNotFoundException;
+    OrganizationResponseDto updateOrganizationById(Long id, OrganizationRequestDto organizationRequestDto) throws OrganizationNotFoundException, CentralResponseException;
 
-    OrganizationResponseDto getOrganizationWithId(UUID id) throws OrganizationNotFoundException;
+    OrganizationResponseDto getOrganizationById(Long id) throws OrganizationNotFoundException;
 
-    UUID deleteOrganizationWithId(UUID id);
+    Long deleteOrganizationById(Long id) throws CentralResponseException;
 
-    void banOrganizationWithId(UUID id) throws OrganizationNotFoundException;
+    void banOrganizationById(Long id) throws OrganizationNotFoundException;
 
-    Organization _getOrganizationWithId(UUID id) throws OrganizationNotFoundException;
+    Organization _getOrganizationWithId(Long id) throws OrganizationNotFoundException;
 
-    boolean isOrganizationFromRussia(UUID id);
+    Organization getOrganizationByInnerId(UUID uuid) throws OrganizationNotFoundException;
+
+    boolean isOrganizationFromRussia(Long id);
 }
