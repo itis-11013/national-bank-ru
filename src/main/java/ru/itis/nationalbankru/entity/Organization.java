@@ -16,7 +16,7 @@ import java.util.UUID;
 @Table(name = "organizations")
 public class Organization extends AbstractEntity {
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "organizations_roles")
     List<Role> roles;
 
