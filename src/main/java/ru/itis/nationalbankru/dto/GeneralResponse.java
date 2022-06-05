@@ -1,8 +1,6 @@
 package ru.itis.nationalbankru.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +9,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.MappedSuperclass;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass

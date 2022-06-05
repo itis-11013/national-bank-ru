@@ -1,7 +1,8 @@
 package ru.itis.nationalbankru.helpers;
 
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -12,16 +13,20 @@ import org.springframework.web.reactive.function.client.WebClient;
  **/
 
 @Component
-@RequiredArgsConstructor
+@Slf4j
 public class CentralClient {
 
 
+    private WebClient webClient;
     @Value("${centralBankEndPoint}")
     private String centralBankEndPoint;
 
-    private final WebClient webClient = WebClient.create(centralBankEndPoint);
-
-    public WebClient getClient() {
-        return this.webClient;
+    @Bean
+    public WebClient getWebClient() {
+        if (this.webClient == null) {
+            this.webClient = WebClient.create(centralBankEndPoint);
+            log.info(String.format("Using central url : %s ", centralBankEndPoint));
+        }
+        return webClient;
     }
 }

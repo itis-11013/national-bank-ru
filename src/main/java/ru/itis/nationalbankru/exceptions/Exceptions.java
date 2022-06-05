@@ -1,17 +1,19 @@
 package ru.itis.nationalbankru.exceptions;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import java.util.UUID;
 
 public class Exceptions {
 
-    public static UsernameNotFoundException usernameNotFoundException(UUID id) {
-        return new UsernameNotFoundException(String.format("User with id %s was not found", id));
+    public static CentralResponseException centralResponseException() {
+        return new CentralResponseException();
     }
 
-    public static OrganizationNotFoundException organizationNotFoundException(UUID id) {
+    public static OrganizationNotFoundException organizationNotFoundException(Long id) {
         return new OrganizationNotFoundException(id);
+    }
+
+    public static OrganizationNotFoundException organizationNotFoundException(UUID uuid) {
+        return new OrganizationNotFoundException(uuid);
     }
 
     public static ContractNotFoundException contractNotFoundException(UUID id) {
@@ -23,6 +25,18 @@ public class Exceptions {
             Double price
     ) {
         return new NoSufficientFundException(organization, price);
+    }
+
+    public static UnitNotFoundException unitNotFoundException(Long id) {
+        return new UnitNotFoundException(id);
+    }
+
+    public static ProductCatalogNotFound productCatalogNotFound(String code) {
+        return new ProductCatalogNotFound(code);
+    }
+
+    public static ProductAlreadyExistsException productAlreadyExistsException(String productName, String organizationName) {
+        return new ProductAlreadyExistsException(productName, organizationName);
     }
 
     public static ContractIsPaidException contractIsPaidException(UUID uuid) {

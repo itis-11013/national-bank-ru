@@ -11,24 +11,16 @@ import java.util.UUID;
 /**
  * @author : Escalopa
  * @created : 31.05.2022, Tue
- * @time : 08:15
+ * @time : 11:59
  **/
 
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CentralResponse<T> {
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("description")
-    private String description;
-    @JsonProperty("data")
-    private T data;
+@NoArgsConstructor
+public class CentralOrganizationResponseDto {
     @JsonProperty("innerid")
-    private UUID innerId;
-
-    public boolean isFailure() {
-        return this.getStatus().equals("failure");
-    }
+    UUID innerId;
+    @JsonProperty("country_code")
+    String countryCode;
 }

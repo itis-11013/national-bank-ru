@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Contract extends AbstractEntity {
 
     @Column(name = "inner_id", nullable = false)
-    private UUID inner_id;
+    private UUID innerId;
 
     @Builder.Default
     @Column(name = "is_paid", nullable = false)
@@ -29,8 +29,9 @@ public class Contract extends AbstractEntity {
     @Column(name = "count", nullable = false)
     private Integer count;
 
-    @Column(name = "unit_price", nullable = false)
-    private Double unitPrice;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "buyer_id")
@@ -41,6 +42,6 @@ public class Contract extends AbstractEntity {
     private Organization seller;
 
     public double getContractAmount() {
-        return this.getCount() * this.getUnitPrice();
+        return this.getCount() * this.product.getPrice();
     }
 }

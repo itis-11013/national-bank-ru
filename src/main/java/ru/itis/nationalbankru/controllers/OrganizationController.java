@@ -10,13 +10,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.itis.nationalbankru.dto.GeneralResponse;
 import ru.itis.nationalbankru.dto.GeneralResponse.ResponseClass;
 import ru.itis.nationalbankru.dto.GeneralResponse.ResponseDescription;
-import ru.itis.nationalbankru.dto.PageableDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
-
-import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/organization")
@@ -26,31 +22,12 @@ public class OrganizationController {
 
     public final OrganizationService organizationService;
 
-    @GetMapping("/all")
-    public ResponseEntity<GeneralResponse<List<OrganizationResponseDto>>> getAllOrganizations(
-            @RequestBody PageableDto pageableDto,
-            RedirectAttributes redirectAttributes) {
-        try {
-            List<OrganizationResponseDto> organizationResponseDtos = organizationService.getAllUserOrganization(pageableDto);
-            return new GeneralResponse<List<OrganizationResponseDto>>().setSuccessResponse(
-                    organizationResponseDtos,
-                    ResponseDescription.deleted,
-                    ResponseClass.organization);
-        } catch (Exception exception) {
-            return new GeneralResponse<List<OrganizationResponseDto>>().setFailureResponse(
-                    redirectAttributes,
-                    exception,
-                    ResponseDescription.delete,
-                    ResponseClass.organization);
-        }
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<GeneralResponse<OrganizationResponseDto>> getOrganizationWithId(
-            @PathVariable UUID id,
+            @PathVariable Long id,
             RedirectAttributes redirectAttributes) {
         try {
-            OrganizationResponseDto organizationResponseDto = organizationService.getOrganizationWithId(id);
+            OrganizationResponseDto organizationResponseDto = organizationService.getOrganizationById(id);
             return new GeneralResponse<OrganizationResponseDto>().setSuccessResponse(
                     organizationResponseDto,
                     ResponseDescription.deleted,
@@ -91,11 +68,11 @@ public class OrganizationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<GeneralResponse<OrganizationResponseDto>> updateOrganizationWithId(
-            @PathVariable UUID id,
+            @PathVariable Long id,
             OrganizationRequestDto organizationRequestDto,
             RedirectAttributes redirectAttributes) {
         try {
-            OrganizationResponseDto organizationResponseDto = organizationService.updateOrganizationWithId(
+            OrganizationResponseDto organizationResponseDto = organizationService.updateOrganizationById(
                     id,
                     organizationRequestDto);
             return new GeneralResponse<OrganizationResponseDto>().setSuccessResponse(
@@ -112,17 +89,17 @@ public class OrganizationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<GeneralResponse<UUID>> deleteUserWithId(
-            @PathVariable UUID id,
+    public ResponseEntity<GeneralResponse<Long>> deleteUserWithId(
+            @PathVariable Long id,
             RedirectAttributes redirectAttributes) {
         try {
-            UUID uuid = organizationService.deleteOrganizationWithId(id);
-            return new GeneralResponse<UUID>().setSuccessResponse(
-                    uuid,
+            Long idResponse = organizationService.deleteOrganizationById(id);
+            return new GeneralResponse<Long>().setSuccessResponse(
+                    idResponse,
                     ResponseDescription.deleted,
                     ResponseClass.organization);
         } catch (Exception exception) {
-            return new GeneralResponse<UUID>().setFailureResponse(
+            return new GeneralResponse<Long>().setFailureResponse(
                     redirectAttributes,
                     exception,
                     ResponseDescription.delete,

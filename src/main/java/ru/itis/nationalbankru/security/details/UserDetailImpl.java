@@ -3,45 +3,45 @@ package ru.itis.nationalbankru.security.details;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.itis.nationalbankru.entity.Organization;
 import ru.itis.nationalbankru.entity.Role;
 import ru.itis.nationalbankru.entity.enums.Status;
-import ru.itis.nationalbankru.entity.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserDetailImpl implements UserDetails {
 
-    private final User user;
+    private final Organization organization;
 
-    public UserDetailImpl(User user) {
-        this.user = user;
+    public UserDetailImpl(Organization organization) {
+        this.organization = organization;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> roles = new ArrayList<>();
-        for (Role role : user.getRoles()) roles.add(new SimpleGrantedAuthority(role.getName()));
+        for (Role role : organization.getRoles()) roles.add(new SimpleGrantedAuthority(role.getName()));
         return roles;
     }
 
     @Override
     public String getPassword() {
-        return user.getPasswordHash();
+        return this.organization.getPasswordHash();
     }
 
     @Override
     public String getUsername() {
-        return user.getPasswordHash();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
+        return this.organization.getName();
     }
 
     @Override
     public boolean isAccountNonLocked() {
+        return Status.ACTIVE.equals(this.organization.getStatus());
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
         return true;
     }
 
@@ -52,6 +52,7 @@ public class UserDetailImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return (Status.ACTIVE.equals(user.getStatus()));
+        return Status.ACTIVE.equals(this.organization.getStatus());
     }
+
 }

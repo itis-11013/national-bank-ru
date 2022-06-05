@@ -11,8 +11,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role extends AbstractEntity {
+public class Role {
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false, updatable = false)
     String name;
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 }

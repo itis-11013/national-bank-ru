@@ -9,16 +9,16 @@ import java.util.Date;
 
 /**
  * @author : Escalopa
- * @created : 30.05.2022, Mon
- * @time : 09:29
+ * @created : 04.06.2022, Sat
+ * @time : 20:23
  **/
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AbstractResponse {
-    private Long id;
+public class AuditResponse {
     private Date createdAt;
-    private LocalDateTime updatedAt;
-    //    private AuditResponse audit;
+    private LocalDateTime updateAt;
+    private String createdBy;
+    private String updatedBy;
 }

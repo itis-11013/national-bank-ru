@@ -1,6 +1,9 @@
 package ru.itis.nationalbankru.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,20 +12,19 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter
-@MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor
+@MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -31,4 +33,11 @@ public abstract class AbstractEntity implements Serializable {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    /*
+        @OneToOne
+        @JoinColumn(name = "id")
+        private Audit audit;
+    **/
+
 }
