@@ -6,9 +6,11 @@ import ru.itis.nationalbankru.dto.product.ProductResponseDto;
 import ru.itis.nationalbankru.entity.Product;
 import ru.itis.nationalbankru.entity.ProductCatalog;
 import ru.itis.nationalbankru.entity.Unit;
-import ru.itis.nationalbankru.exceptions.*;
+import ru.itis.nationalbankru.exceptions.CentralResponseException;
+import ru.itis.nationalbankru.exceptions.ProductCatalogNotFound;
+import ru.itis.nationalbankru.exceptions.ProductExceedStockLimitException;
+import ru.itis.nationalbankru.exceptions.UnitNotFoundException;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,11 +21,7 @@ import java.util.UUID;
  **/
 public interface ProductService {
 
-    ProductResponseDto createProduct(ProductRequestDto productRequestDto) throws UserPrincipalNotFoundException,
-            OrganizationNotFoundException,
-            UnitNotFoundException,
-            ProductCatalogNotFound,
-            ProductAlreadyExistsException, CentralResponseException;
+    ProductResponseDto createProduct(ProductRequestDto productRequestDto) throws Exception;
 
     List<ProductResponseDto> getOrganizationProducts(PageableDto pageable);
 

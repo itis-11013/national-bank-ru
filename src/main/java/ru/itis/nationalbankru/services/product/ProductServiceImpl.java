@@ -9,6 +9,7 @@ import ru.itis.nationalbankru.entity.Organization;
 import ru.itis.nationalbankru.entity.Product;
 import ru.itis.nationalbankru.entity.ProductCatalog;
 import ru.itis.nationalbankru.entity.Unit;
+import ru.itis.nationalbankru.entity.enums.Status;
 import ru.itis.nationalbankru.exceptions.*;
 import ru.itis.nationalbankru.helpers.OrganizationHelper;
 import ru.itis.nationalbankru.helpers.PageHelper;
@@ -42,11 +43,13 @@ public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
 
     @Override
-    public ProductResponseDto createProduct(ProductRequestDto productRequestDto) throws UnitNotFoundException, ProductCatalogNotFound, ProductAlreadyExistsException, CentralResponseException {
+    public ProductResponseDto createProduct(ProductRequestDto productRequestDto) throws Exception {
 
         // Get organization
         Organization organization = organizationHelper.getCurrentOrganization();
-
+        if (Status.BANNED == organization.getStatus()) {
+            throw new Exception(String.format("Cannot create product, Organization[%s] is  Banned ", organization.getName()));
+        }
         // Check if product already exists for this organization
         boolean productAlreadyExists = productRepository.findProductByNameAndSellerId(productRequestDto.getName(), organization.getId()).isPresent();
         if (productAlreadyExists) {
