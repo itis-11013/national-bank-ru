@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.itis.nationalbankru.dto.GeneralResponse;
 import ru.itis.nationalbankru.dto.contract.ContractResponseDto;
 import ru.itis.nationalbankru.services.payment.PaymentService;
@@ -28,19 +27,15 @@ public class PaymentController {
 
     @PostMapping("/{id}")
     public ResponseEntity<GeneralResponse<ContractResponseDto>> createPayment(
-            @PathVariable UUID id,
-            RedirectAttributes redirectAttributes) {
+            @PathVariable UUID id) {
         try {
             ContractResponseDto contractResponseDto = paymentService.submitPayment(id);
-            return new GeneralResponse<ContractResponseDto>().setSuccessResponse(
+            return new GeneralResponse<ContractResponseDto>().successfulCreateResponse(
                     contractResponseDto,
-                    GeneralResponse.ResponseDescription.payed,
                     GeneralResponse.ResponseClass.contract);
         } catch (Exception exception) {
-            return new GeneralResponse<ContractResponseDto>().setFailureResponse(
-                    redirectAttributes,
+            return new GeneralResponse<ContractResponseDto>().failureCreateResponse(
                     exception,
-                    GeneralResponse.ResponseDescription.pay,
                     GeneralResponse.ResponseClass.contract);
         }
     }

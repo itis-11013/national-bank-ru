@@ -1,19 +1,21 @@
 package ru.itis.nationalbankru.controllers;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.itis.nationalbankru.dto.GeneralResponse;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
+import ru.itis.nationalbankru.dto.validators.OnCreate;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
 
 @Controller
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@Slf4j
 public class AuthenticationController {
 
     private final OrganizationService organizationService;
@@ -29,14 +31,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signUp")
-    public String signUp(OrganizationRequestDto organizationRequestDto, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<GeneralResponse<Long>> signUp(
+            @Validated(OnCreate.class) @RequestBody OrganizationRequestDto organizationRequestDto) {
         try {
-            organizationService.createOrganization(organizationRequestDto);
-            return "redirect:/auth/signIn";
+            Long id = organizationService.createOrganization(organizationRequestDto).getId();
+            return new GeneralResponse<Long>().successfulCreateResponse(id, GeneralResponse.ResponseClass.organization);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/auth/signUp";
+            return new GeneralResponse<Long>().failureCreateResponse(e, GeneralResponse.ResponseClass.organization);
         }
     }
 
