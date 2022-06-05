@@ -3,14 +3,15 @@ package ru.itis.nationalbankru.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.itis.nationalbankru.dto.GeneralResponse;
 import ru.itis.nationalbankru.dto.contract.ContractResponseDto;
+import ru.itis.nationalbankru.dto.payment.PaymentRequestDto;
 import ru.itis.nationalbankru.services.payment.PaymentService;
 
-import java.util.UUID;
+import javax.validation.Valid;
 
 /**
  * @author : Escalopa
@@ -25,11 +26,11 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/{id}")
+    @PostMapping()
     public ResponseEntity<GeneralResponse<ContractResponseDto>> createPayment(
-            @PathVariable UUID id) {
+            @Valid @RequestBody PaymentRequestDto paymentRequestDto) {
         try {
-            ContractResponseDto contractResponseDto = paymentService.submitPayment(id);
+            ContractResponseDto contractResponseDto = paymentService.submitPayment(paymentRequestDto.getContractId());
             return new GeneralResponse<ContractResponseDto>().successfulCreateResponse(
                     contractResponseDto,
                     GeneralResponse.ResponseClass.contract);
