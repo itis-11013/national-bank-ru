@@ -1,5 +1,6 @@
 package ru.itis.nationalbankru.mappers;
 
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import ru.itis.nationalbankru.dto.central.contract.CentralContractRequestDto;
@@ -15,7 +16,8 @@ import java.util.List;
  * @time : 09:19
  **/
 
-@Mapper
+
+@Mapper(uses = {OrganizationMapper.class, ProductMapper.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface ContractMapper extends EntityMapper<Contract, ContractRequestDto, ContractResponseDto> {
 
     ContractResponseDto toDto(Contract contract);
