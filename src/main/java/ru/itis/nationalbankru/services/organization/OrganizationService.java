@@ -5,6 +5,7 @@ import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.entity.Organization;
 import ru.itis.nationalbankru.exceptions.CentralResponseException;
+import ru.itis.nationalbankru.exceptions.NoSufficientFundException;
 import ru.itis.nationalbankru.exceptions.OrganizationNotFoundException;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public interface OrganizationService {
     void banOrganizationById(Long id) throws OrganizationNotFoundException;
 
     Organization _getOrganizationWithId(Long id) throws OrganizationNotFoundException;
+
+    void validateOrganizationFundsOnPurchase(Organization organization, Double amount) throws NoSufficientFundException;
 
     Organization getOrganizationByInnerId(UUID uuid) throws OrganizationNotFoundException;
 

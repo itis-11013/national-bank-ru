@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.itis.nationalbankru.dto.PageableDto;
-import ru.itis.nationalbankru.dto.central.CentralOrganizationRequestDto;
-import ru.itis.nationalbankru.dto.central.CentralOrganizationResponseDto;
+import ru.itis.nationalbankru.dto.central.organization.CentralOrganizationRequestDto;
+import ru.itis.nationalbankru.dto.central.organization.CentralOrganizationResponseDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.entity.Organization;
@@ -18,6 +18,7 @@ import ru.itis.nationalbankru.entity.enums.RoleName;
 import ru.itis.nationalbankru.entity.enums.Status;
 import ru.itis.nationalbankru.exceptions.CentralResponseException;
 import ru.itis.nationalbankru.exceptions.Exceptions;
+import ru.itis.nationalbankru.exceptions.NoSufficientFundException;
 import ru.itis.nationalbankru.exceptions.OrganizationNotFoundException;
 import ru.itis.nationalbankru.helpers.PageHelper;
 import ru.itis.nationalbankru.mappers.OrganizationMapper;
@@ -121,6 +122,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public Organization _getOrganizationWithId(Long id) throws OrganizationNotFoundException {
         return organizationRepository.findById(id).orElseThrow(() -> Exceptions.organizationNotFoundException(id));
+    }
+
+    @Override
+    public void validateOrganizationFundsOnPurchase(Organization buyer, Double amount) throws NoSufficientFundException {
+        if (buyer.getBalance() - amount < 0.0)
+            throw Exceptions.noSufficientFundException(buyer.getName(), amount);
     }
 
     @Override
