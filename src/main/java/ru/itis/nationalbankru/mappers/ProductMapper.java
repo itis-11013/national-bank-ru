@@ -22,13 +22,13 @@ public interface ProductMapper extends EntityMapper<Product, ProductRequestDto, 
 
     List<ProductResponseDto> toDto(List<Product> products);
 
-    @Mapping(target = "unit.id", source = "unit")
+    @Mapping(target = "unit", ignore = true)
     Product fromDto(ProductRequestDto productRequestDto);
 
+    @Mapping(target = "unit", ignore = true)
+    Product fromDto(ProductResponseDto productResponseDto);
 
-    @Mapping(target = "unit.id", source = "unit")
+    @Mapping(target = "unit", ignore = true)
     void updateFromDto(ProductRequestDto productRequestDto, @MappingTarget Product product);
 
-    @Mapping(target = "unit.id", source = "unit")
-    void updateFromDto(ProductResponseDto productResponseDto, @MappingTarget Product product);
 }

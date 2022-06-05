@@ -43,9 +43,6 @@ public class Organization extends AbstractEntity {
     @Builder.Default
     private Double frozenBalance = 0.0;
 
-    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
-    private List<Contract> sellContracts;
-
     @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
     private List<Contract> buyContract;
 

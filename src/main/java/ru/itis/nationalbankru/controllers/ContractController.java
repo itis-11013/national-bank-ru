@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.nationalbankru.dto.GeneralResponse;
 import ru.itis.nationalbankru.dto.GeneralResponse.ResponseClass;
-import ru.itis.nationalbankru.dto.central.CentralContractRequestDto;
+import ru.itis.nationalbankru.dto.central.contract.CentralContractRequestDto;
 import ru.itis.nationalbankru.dto.contract.ContractRequestDto;
 import ru.itis.nationalbankru.dto.contract.ContractResponseDto;
 import ru.itis.nationalbankru.dto.validators.OnCreate;
