@@ -1,7 +1,7 @@
 package ru.itis.nationalbankru.mappers;
 
 import org.mapstruct.*;
-import ru.itis.nationalbankru.dto.central.CentralOrganizationRequestDto;
+import ru.itis.nationalbankru.dto.central.organization.CentralOrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.entity.Organization;
@@ -21,7 +21,6 @@ public interface OrganizationMapper extends EntityMapper<Organization, Organizat
     List<OrganizationResponseDto> toDto(List<Organization> organization);
 
     Organization fromDto(OrganizationRequestDto organizationResponseDto);
-
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "passwordHash", ignore = true)
