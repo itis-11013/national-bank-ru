@@ -11,6 +11,7 @@ import ru.itis.nationalbankru.entity.ProductCatalog;
 import ru.itis.nationalbankru.entity.Unit;
 import ru.itis.nationalbankru.exceptions.*;
 import ru.itis.nationalbankru.helpers.OrganizationHelper;
+import ru.itis.nationalbankru.helpers.PageHelper;
 import ru.itis.nationalbankru.mappers.ProductMapper;
 import ru.itis.nationalbankru.repositories.ProductCatalogRepository;
 import ru.itis.nationalbankru.repositories.ProductRepository;
@@ -33,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final String entityPath = "product";
     private final OrganizationHelper organizationHelper;
+    private final PageHelper pageHelper;
     private final ProductRepository productRepository;
     private final ProductCatalogRepository productCatalogRepository;
     private final UnitRepository unitRepository;
@@ -67,13 +69,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> getMyProducts(PageableDto pageable) {
-        return null;
+    public List<ProductResponseDto> getOrganizationProducts(PageableDto pageable) {
+        Organization currentUser = organizationHelper.getCurrentOrganization();
+        return productMapper
+                .toDto(productRepository
+                        .findProductBySeller(currentUser, pageHelper.toPageable(pageable))
+                        .getContent());
     }
 
     @Override
     public List<ProductResponseDto> getAllProducts(PageableDto pageable) {
-        return null;
+        return productMapper
+                .toDto(productRepository
+                        .findAll(pageHelper.toPageable(pageable))
+                        .getContent());
     }
 
     @Override

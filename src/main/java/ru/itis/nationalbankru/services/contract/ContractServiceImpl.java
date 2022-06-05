@@ -92,7 +92,7 @@ public class ContractServiceImpl implements ContractService {
 
         productService.validateProductCountOnPurchase(product.getInnerId(), centralContractRequestDto.getCount());
         contractRepository.save(contract);
-        return null;
+        return contractMapper.toDto(contract);
     }
 
     @Override

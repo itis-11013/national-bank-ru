@@ -25,11 +25,10 @@ public interface ProductService {
             ProductCatalogNotFound,
             ProductAlreadyExistsException, CentralResponseException;
 
-    List<ProductResponseDto> getMyProducts(PageableDto pageable);
+    List<ProductResponseDto> getOrganizationProducts(PageableDto pageable);
 
     List<ProductResponseDto> getAllProducts(PageableDto pageable);
 
-    //    ProductResponseDto getProductByUUID(UUID uuid);
 
     Product getProductOrFetchByInnerId(UUID uuid) throws CentralResponseException;
 
