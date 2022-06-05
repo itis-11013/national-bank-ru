@@ -27,4 +27,8 @@ public class CentralResponse<T> {
     private T data;
     @JsonProperty("innerid")
     private UUID innerId;
+
+    public boolean isFailure() {
+        return this.getStatus().equals("failure");
+    }
 }
