@@ -1,9 +1,10 @@
 package ru.itis.nationalbankru.entity;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -24,22 +25,22 @@ public class Contract extends AbstractEntity {
     private Boolean isPaid = false;
 
     @Column(name = "payment_date")
-    private Date paymentDate;
+    private LocalDateTime paymentDate;
 
     @Column(name = "count", nullable = false)
-    private Integer count;
+    private Double count;
+
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Nullable
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private Organization buyer;
-
-    @ManyToOne
-    @JoinColumn(name = "seller_id")
-    private Organization seller;
 
     public double getContractAmount() {
         return this.getCount() * this.product.getPrice();

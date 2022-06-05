@@ -1,6 +1,7 @@
 package ru.itis.nationalbankru.entity;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -38,6 +39,7 @@ public class Product extends AbstractEntity {
     @JoinColumn(name = "unit_id")
     private Unit unit;
 
+    @Nullable
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Organization seller;
@@ -48,5 +50,5 @@ public class Product extends AbstractEntity {
 
     @OneToMany(mappedBy = "product")
     private List<Contract> contracts;
-    
+
 }
