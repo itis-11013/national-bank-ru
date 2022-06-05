@@ -2,8 +2,8 @@ package ru.itis.nationalbankru.controllers;
 
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.nationalbankru.dto.GeneralResponse;
@@ -17,7 +17,6 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/organization")
 @RequiredArgsConstructor
-@Slf4j
 public class OrganizationController {
 
     public final OrganizationService organizationService;
@@ -75,6 +74,7 @@ public class OrganizationController {
         }
     }
 
+    @PreAuthorize("#id == authentication.principal.id")
     @DeleteMapping("/{id}")
     public ResponseEntity<GeneralResponse<Long>> deleteOrganizationById(@PathVariable Long id) {
         try {

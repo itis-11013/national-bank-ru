@@ -28,7 +28,7 @@ public class ContractController {
 
     private final ContractService contractService;
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<GeneralResponse<ContractResponseDto>> createContractFromCentral(
             @Validated(OnCreate.class) @RequestBody CentralContractRequestDto centralContractRequestDto) {
         try {

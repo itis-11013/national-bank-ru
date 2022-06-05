@@ -2,6 +2,7 @@ package ru.itis.nationalbankru.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.nationalbankru.dto.GeneralResponse;
@@ -19,6 +20,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@Secured("ADMIN")
 public class AdminController {
 
     private final OrganizationService organizationService;
