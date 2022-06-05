@@ -1,4 +1,4 @@
-package ru.itis.nationalbankru.dto.central;
+package ru.itis.nationalbankru.dto.central.Organization;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

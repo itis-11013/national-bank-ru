@@ -3,22 +3,25 @@ package ru.itis.nationalbankru.services.contract;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.itis.nationalbankru.dto.central.CentralContractDto;
+import ru.itis.nationalbankru.dto.PageableDto;
+import ru.itis.nationalbankru.dto.central.contract.CentralContractRequestDto;
 import ru.itis.nationalbankru.dto.contract.ContractRequestDto;
 import ru.itis.nationalbankru.dto.contract.ContractResponseDto;
 import ru.itis.nationalbankru.entity.Contract;
 import ru.itis.nationalbankru.entity.Organization;
-import ru.itis.nationalbankru.exceptions.ContractIsPaidException;
-import ru.itis.nationalbankru.exceptions.ContractNotFoundException;
-import ru.itis.nationalbankru.exceptions.Exceptions;
-import ru.itis.nationalbankru.exceptions.NoSufficientFundException;
+import ru.itis.nationalbankru.entity.Product;
+import ru.itis.nationalbankru.exceptions.*;
+import ru.itis.nationalbankru.helpers.OrganizationHelper;
 import ru.itis.nationalbankru.mappers.ContractMapper;
 import ru.itis.nationalbankru.repositories.ContractRepository;
 import ru.itis.nationalbankru.repositories.OrganizationRepository;
+import ru.itis.nationalbankru.repositories.ProductRepository;
 import ru.itis.nationalbankru.services.central.CentralService;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
+import ru.itis.nationalbankru.services.product.ProductService;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -35,55 +38,89 @@ public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;
     private final OrganizationRepository organizationRepository;
-    private final OrganizationService organizationService;
+    private final ProductRepository productRepository;
+    private final OrganizationHelper organizationHelper;
     private final ContractMapper contractMapper;
-    private final CentralService<ContractRequestDto, CentralContractDto> centralService;
+    private final ProductService productService;
+    private final OrganizationService organizationService;
+    private final CentralService<ContractRequestDto, ContractRequestDto> centralContractService;
 
     private final String entityPath = "organization";
 
     @Override
-    public ContractResponseDto createContract(ContractRequestDto contractRequestDto) throws NoSufficientFundException {
+    public List<ContractResponseDto> getAllContracts(PageableDto pageableDto) {
+        return null;
+    }
+
+    @Override
+    public ContractResponseDto createContract(ContractRequestDto contractRequestDto) throws
+            NoSufficientFundException,
+            CentralResponseException,
+            ProductExceedStockLimitException {
+
         Contract contract = contractMapper.fromDto(contractRequestDto);
+        Organization buyer = organizationHelper.getCurrentOrganization();
+        Product product = productService.getProductOrFetchByInnerId(contractRequestDto.getProductInnerId());
+        contract.setProduct(product);
 
-        // Check if product is in our bank
-        Organization seller = contract.getSeller();
+        // Validations
+        organizationService.validateOrganizationFundsOnPurchase(buyer, contract.getContractAmount());
+        productService.validateProductCountOnPurchase(product.getInnerId(), contractRequestDto.getCount());
 
-        boolean isBuyerFromRussia = organizationService.isOrganizationFromRussia(contractRequestDto.getBuyerId());
-        Organization buyer = null;
-        if (isBuyerFromRussia) {
-            // Check if organization has enough funds to purchase product
-            buyer = organizationRepository.getById(contractRequestDto.getBuyerId());
-            double newOrganizationBalance = buyer.getBalance() - contract.getContractAmount();
-            if (newOrganizationBalance < 0)
-                throw Exceptions.noSufficientFundException(buyer.getName(), contract.getContractAmount());
-            else
-                // Freeze contract amount to buyer
-                organizationRepository.freezeContractFees(buyer.getId(), contract.getContractAmount());
-        }
+        // Get InnerId from central bank
+        UUID innerId = centralContractService.createEntity(entityPath, contractRequestDto);
 
-        if (contract.getInner_id() == null) {
-            centralService.createEntity(entityPath, contractRequestDto);
-        }
+        // Freeze funds
+        organizationRepository.freezeContractFees(buyer.getId(), contract.getContractAmount());
+        productRepository.freezeContractCount(product.getId(), contract.getCount());
 
-        // Insert contract in database
-        contract.setSeller(seller);
+        // Insert the new product & contract in database
+        productRepository.save(product);
+        contract.setInnerId(innerId);
         contract.setBuyer(buyer);
+        contract.setProduct(product);
         contractRepository.save(contract);
         return contractMapper.toDto(contract);
     }
 
     @Override
+    public ContractResponseDto createContractFromCentral(CentralContractRequestDto centralContractRequestDto) throws
+            ProductExceedStockLimitException {
+        Product product = productService.getProductByInnerId(centralContractRequestDto.getProductId());
+        Contract contract = contractMapper.fromDto(centralContractRequestDto);
+        contract.setProduct(product);
+
+        productService.validateProductCountOnPurchase(product.getInnerId(), centralContractRequestDto.getCount());
+        contractRepository.save(contract);
+        return null;
+    }
+
+    @Override
     public ContractResponseDto getContractById(UUID id) throws ContractNotFoundException {
-        Contract contract = this._getContractById(id);
+        Contract contract = this.getContractByInnerId(id);
         return contractMapper.toDto(contract);
     }
 
     @Override
-    public UUID deleteContractById(UUID id) throws ContractNotFoundException, ContractIsPaidException {
-        Contract contract = this._getContractById(id);
+    public UUID deleteContractById(UUID id) throws
+            ContractNotFoundException,
+            ContractIsPaidException,
+            CentralResponseException {
+        Contract contract = this.getContractByInnerId(id);
 
-        // Throw error if contract is paid
+        // Throw error if contract is already paid
         if (contract.getIsPaid()) throw Exceptions.contractIsPaidException(id);
+
+        // Delete contract in central service
+        centralContractService.deleteEntity(entityPath, id);
+
+        // Unfreeze product count if organization is from russia
+        // Otherwise delete product itself from database
+        Product product = contract.getProduct();
+        Organization seller = product.getSeller();
+        if (seller != null) {
+            productRepository.unFreezeContractCount(product.getId(), contract.getContractAmount());
+        }
 
         // Refund money to product buyer (if from russia)
         Organization buyer = contract.getBuyer();
@@ -91,15 +128,12 @@ public class ContractServiceImpl implements ContractService {
             organizationRepository.refundContractFees(buyer.getId(), contract.getContractAmount());
         }
 
-        // Delete contract in central service
-        centralService.deleteEntity(entityPath, id);
-
-        contractRepository.delete(contract);
+        contractRepository.softDeleteById(contract.getInnerId());
         return id;
     }
 
     @Override
-    public Contract _getContractById(UUID id) throws ContractNotFoundException {
+    public Contract getContractByInnerId(UUID id) throws ContractNotFoundException {
         return contractRepository.findById(id).orElseThrow(() -> Exceptions.contractNotFoundException(id));
     }
 }

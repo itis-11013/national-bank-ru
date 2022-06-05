@@ -3,6 +3,7 @@ package ru.itis.nationalbankru.dto.central;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import ru.itis.nationalbankru.dto.central.organization.CentralOrganizationResponseDto;
 
 import java.util.Date;
 import java.util.UUID;

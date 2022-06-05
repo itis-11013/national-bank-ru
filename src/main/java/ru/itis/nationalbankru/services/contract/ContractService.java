@@ -1,13 +1,13 @@
 package ru.itis.nationalbankru.services.contract;
 
+import ru.itis.nationalbankru.dto.PageableDto;
+import ru.itis.nationalbankru.dto.central.contract.CentralContractRequestDto;
 import ru.itis.nationalbankru.dto.contract.ContractRequestDto;
 import ru.itis.nationalbankru.dto.contract.ContractResponseDto;
 import ru.itis.nationalbankru.entity.Contract;
-import ru.itis.nationalbankru.exceptions.ContractIsPaidException;
-import ru.itis.nationalbankru.exceptions.ContractNotFoundException;
-import ru.itis.nationalbankru.exceptions.NoSufficientFundException;
-import ru.itis.nationalbankru.exceptions.OrganizationNotFoundException;
+import ru.itis.nationalbankru.exceptions.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -17,11 +17,20 @@ import java.util.UUID;
  **/
 public interface ContractService {
 
-    ContractResponseDto createContract(ContractRequestDto contractRequestDto) throws OrganizationNotFoundException, NoSufficientFundException;
+
+    List<ContractResponseDto> getAllContracts(PageableDto pageableDto);
+
+    ContractResponseDto createContract(ContractRequestDto contractRequestDto) throws
+            OrganizationNotFoundException,
+            NoSufficientFundException,
+            ProductCatalogNotFound,
+            UnitNotFoundException, CentralResponseException, ProductExceedStockLimitException;
+
+    ContractResponseDto createContractFromCentral(CentralContractRequestDto contractRequestDto) throws ProductExceedStockLimitException;
 
     ContractResponseDto getContractById(UUID id) throws ContractNotFoundException;
 
-    UUID deleteContractById(UUID id) throws ContractNotFoundException, ContractIsPaidException;
+    UUID deleteContractById(UUID id) throws ContractNotFoundException, ContractIsPaidException, CentralResponseException;
 
-    Contract _getContractById(UUID id) throws ContractNotFoundException;
+    Contract getContractByInnerId(UUID id) throws ContractNotFoundException;
 }
