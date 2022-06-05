@@ -8,6 +8,10 @@ public class Exceptions {
         return new CentralResponseException();
     }
 
+    public static ProductExceedStockLimitException productExceedStockLimitException(String productName, Double count) {
+        return new ProductExceedStockLimitException(productName, count);
+    }
+
     public static OrganizationNotFoundException organizationNotFoundException(Long id) {
         return new OrganizationNotFoundException(id);
     }
