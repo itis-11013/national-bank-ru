@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.nationalbankru.dto.GeneralResponse;
 import ru.itis.nationalbankru.dto.GeneralResponse.ResponseClass;
-import ru.itis.nationalbankru.dto.GeneralResponse.ResponseDescription;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
@@ -33,12 +32,12 @@ public class OrganizationController {
             @Valid @RequestBody OrganizationRequestDto organizationRequestDto) {
         try {
             OrganizationResponseDto organizationResponseDto = organizationService.createOrganization(organizationRequestDto);
-            return new GeneralResponse<OrganizationResponseDto>().setSuccessResponse(
+            return new GeneralResponse<OrganizationResponseDto>().successfulCreateResponse(
                     organizationResponseDto,
                     ResponseClass.organization);
         } catch (Exception exception) {
             exception.printStackTrace();
-            return new GeneralResponse<OrganizationResponseDto>().setFailureResponse(
+            return new GeneralResponse<OrganizationResponseDto>().failureCreateResponse(
                     exception,
                     ResponseClass.organization);
         }
@@ -52,11 +51,11 @@ public class OrganizationController {
             OrganizationResponseDto organizationResponseDto = organizationService.updateOrganizationById(
                     id,
                     organizationRequestDto);
-            return new GeneralResponse<OrganizationResponseDto>().setSuccessResponse(
+            return new GeneralResponse<OrganizationResponseDto>().successfulUpdateResponse(
                     organizationResponseDto,
                     ResponseClass.organization);
         } catch (Exception exception) {
-            return new GeneralResponse<OrganizationResponseDto>().setFailureResponse(
+            return new GeneralResponse<OrganizationResponseDto>().failureUpdateResponse(
                     exception,
                     ResponseClass.organization);
         }
@@ -66,11 +65,11 @@ public class OrganizationController {
     public ResponseEntity<GeneralResponse<OrganizationResponseDto>> getOrganizationById(@PathVariable Long id) {
         try {
             OrganizationResponseDto organizationResponseDto = organizationService.getOrganizationById(id);
-            return new GeneralResponse<OrganizationResponseDto>().setSuccessResponse(
+            return new GeneralResponse<OrganizationResponseDto>().successfulFetchResponse(
                     organizationResponseDto,
                     ResponseClass.organization);
         } catch (Exception exception) {
-            return new GeneralResponse<OrganizationResponseDto>().setFailureResponse(
+            return new GeneralResponse<OrganizationResponseDto>().failureFetchResponse(
                     exception,
                     ResponseClass.organization);
         }
@@ -80,11 +79,11 @@ public class OrganizationController {
     public ResponseEntity<GeneralResponse<Long>> deleteOrganizationById(@PathVariable Long id) {
         try {
             Long idResponse = organizationService.deleteOrganizationById(id);
-            return new GeneralResponse<Long>().setSuccessResponse(
+            return new GeneralResponse<Long>().successfulDeleteResponse(
                     idResponse,
                     ResponseClass.organization);
         } catch (Exception exception) {
-            return new GeneralResponse<Long>().setFailureResponse(
+            return new GeneralResponse<Long>().failureDeleteResponse(
                     exception,
                     ResponseClass.organization);
         }

@@ -30,11 +30,11 @@ public class PaymentController {
             @PathVariable UUID id) {
         try {
             ContractResponseDto contractResponseDto = paymentService.submitPayment(id);
-            return new GeneralResponse<ContractResponseDto>().setSuccessResponse(
+            return new GeneralResponse<ContractResponseDto>().successfulCreateResponse(
                     contractResponseDto,
                     GeneralResponse.ResponseClass.contract);
         } catch (Exception exception) {
-            return new GeneralResponse<ContractResponseDto>().setFailureResponse(
+            return new GeneralResponse<ContractResponseDto>().failureCreateResponse(
                     exception,
                     GeneralResponse.ResponseClass.contract);
         }
