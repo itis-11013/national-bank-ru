@@ -1,4 +1,4 @@
-package ru.itis.nationalbankru.dto.central;
+package ru.itis.nationalbankru.dto.central.organization;
 
 import lombok.Builder;
 import lombok.Getter;

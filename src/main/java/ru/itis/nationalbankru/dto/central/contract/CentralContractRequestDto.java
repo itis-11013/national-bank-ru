@@ -1,4 +1,4 @@
-package ru.itis.nationalbankru.dto.central;
+package ru.itis.nationalbankru.dto.central.contract;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
