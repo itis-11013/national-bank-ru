@@ -1,5 +1,7 @@
 package ru.itis.nationalbankru.services.central;
 
+import ru.itis.nationalbankru.exceptions.CentralResponseException;
+
 import java.util.UUID;
 
 /**
@@ -9,11 +11,11 @@ import java.util.UUID;
  **/
 public interface CentralService<T, E> {
 
-    UUID createEntity(String requestPath, T data);
+    UUID createEntity(String requestPath, T data) throws CentralResponseException;
 
-    void updateEntity(String requestPath, UUID uuid, T data);
+    E updateEntity(String requestPath, UUID uuid, T data) throws CentralResponseException;
 
-    E getEntity(String requestPath, UUID uuid);
+    E getEntity(String requestPath, UUID uuid) throws CentralResponseException;
 
-    void deleteEntity(String requestPath, UUID uuid);
+    void deleteEntity(String requestPath, UUID uuid) throws CentralResponseException;
 }

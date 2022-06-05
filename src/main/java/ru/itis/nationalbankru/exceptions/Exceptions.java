@@ -4,6 +4,9 @@ import java.util.UUID;
 
 public class Exceptions {
 
+    public static CentralResponseException centralResponseException() {
+        return new CentralResponseException();
+    }
 
     public static OrganizationNotFoundException organizationNotFoundException(Long id) {
         return new OrganizationNotFoundException(id);

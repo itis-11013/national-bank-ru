@@ -6,10 +6,11 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import ru.itis.nationalbankru.dto.central.CentralResponse;
+import ru.itis.nationalbankru.exceptions.CentralResponseException;
+import ru.itis.nationalbankru.exceptions.Exceptions;
 import ru.itis.nationalbankru.helpers.CentralClient;
 
 import javax.transaction.Transactional;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -27,42 +28,45 @@ public class CentralServiceImpl<T, E> implements CentralService<T, E> {
     private final CentralClient centralClient;
 
     @Override
-    public UUID createEntity(String requestPath, T data) {
-        CentralResponse<UUID> response = centralClient.getWebClient().post()
-                .uri(requestPath)
-                .body(BodyInserters.fromValue(data))
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<CentralResponse<UUID>>() {
-                }).block();
-        assert response != null;
+    public UUID createEntity(String requestPath, T data) throws CentralResponseException {
+        CentralResponse<UUID> response = centralClient.getWebClient().post().uri(requestPath).body(BodyInserters.fromValue(data)).retrieve().bodyToMono(new ParameterizedTypeReference<CentralResponse<UUID>>() {
+        }).block();
+        if (response == null || !response.isSuccess()) {
+            throw Exceptions.centralResponseException();
+        }
         return response.getInnerId();
     }
 
     @Override
-    public void updateEntity(String requestPath, UUID uuid, T data) {
-        centralClient.getWebClient().patch()
-                .uri(uriBuilder -> uriBuilder.path(requestPath + "/").queryParam("id", uuid).build())
-                .body(BodyInserters.fromValue(data))
-                .retrieve();
+    public E updateEntity(String requestPath, UUID uuid, T data) throws CentralResponseException {
+        CentralResponse<E> response = centralClient.getWebClient().patch().uri(uriBuilder -> uriBuilder.path(requestPath + "/{id}").build(uuid)).body(BodyInserters.fromValue(data)).retrieve().bodyToMono(new ParameterizedTypeReference<CentralResponse<E>>() {
+        }).block();
+        this.validateResponse(response);
+        return this.getResponseBody(response);
     }
 
     @Override
-    public E getEntity(String requestPath, UUID uuid) {
-        return Objects.requireNonNull(centralClient.getWebClient().get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(requestPath + "/{id}")
-                        .build(uuid))
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<CentralResponse<E>>() {
-                }).block()).getData();
+    public E getEntity(String requestPath, UUID uuid) throws CentralResponseException {
+        CentralResponse<E> response = centralClient.getWebClient().get().uri(uriBuilder -> uriBuilder.path(requestPath + "/{id}").build(uuid)).retrieve().bodyToMono(new ParameterizedTypeReference<CentralResponse<E>>() {
+        }).block();
+        this.validateResponse(response);
+        return this.getResponseBody(response);
     }
 
     @Override
-    public void deleteEntity(String requestPath, UUID uuid) {
-        centralClient.getWebClient().delete()
-                .uri(uriBuilder -> uriBuilder
-                        .path(requestPath + "/{id}")
-                        .build(uuid))
-                .retrieve();
+    public void deleteEntity(String requestPath, UUID uuid) throws CentralResponseException {
+        CentralResponse<UUID> response = centralClient.getWebClient().delete().uri(uriBuilder -> uriBuilder.path(requestPath + "/{id}").build(uuid)).retrieve().bodyToMono(new ParameterizedTypeReference<CentralResponse<UUID>>() {
+        }).block();
+        this.validateResponse(response);
+    }
+
+    public void validateResponse(CentralResponse<?> response) throws CentralResponseException {
+        if (response == null || !response.isSuccess()) {
+            throw Exceptions.centralResponseException();
+        }
+    }
+
+    public E getResponseBody(CentralResponse<E> response) {
+        return (response == null || !response.isSuccess()) ? null : response.getData();
     }
 }
