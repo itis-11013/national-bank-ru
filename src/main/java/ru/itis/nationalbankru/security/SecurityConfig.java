@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
@@ -30,9 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("customUserDetailsService")
     private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder,
-                          DataSource dataSource,
-                          UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(PasswordEncoder passwordEncoder, DataSource dataSource, UserDetailsServiceImpl userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
         this.userDetailsService = userDetailsService;
@@ -47,23 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.authorizeRequests()
-                .antMatchers("/resources").permitAll();
+        http.authorizeRequests().antMatchers("/resources").permitAll();
 
-        http.authorizeRequests()
-                .antMatchers("/").authenticated()
-                .antMatchers("/admin/*").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers("/").authenticated().antMatchers("/admin/*").hasAuthority("ADMIN");
 
-        http.formLogin()
-                .loginPage("/auth/signIn")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/")
-                .failureUrl("/auth/signIn?error");
+        http.formLogin().loginPage("/auth/signIn").usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/").failureUrl("/auth/signIn?error");
 
-        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET"))
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
+        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET")).invalidateHttpSession(true).deleteCookies("JSESSIONID");
     }
 
     @Bean
