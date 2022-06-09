@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.itis.nationalbankru.dto.GeneralResponse;
 import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
+import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.dto.validators.OnCreate;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
 
@@ -22,11 +23,19 @@ public class AuthenticationController {
 
     @GetMapping("/signIn")
     public String getSignInPage() {
+        OrganizationResponseDto organization = organizationService.getCurrentUser();
+        if (organization != null) {
+            return "redirect:/";
+        }
         return "sign_in_page";
     }
 
     @GetMapping("/signUp")
     public String getSignUpPage() {
+        OrganizationResponseDto organization = organizationService.getCurrentUser();
+        if (organization != null) {
+            return "redirect:/";
+        }
         return "sign_up_page";
     }
 
