@@ -3,6 +3,7 @@ package ru.itis.nationalbankru.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import ru.itis.nationalbankru.dto.central.product.CentralProductResponseDto;
 import ru.itis.nationalbankru.dto.product.ProductRequestDto;
 import ru.itis.nationalbankru.dto.product.ProductResponseDto;
 import ru.itis.nationalbankru.entity.Product;
@@ -17,7 +18,8 @@ import java.util.List;
 @Mapper
 public interface ProductMapper extends EntityMapper<Product, ProductRequestDto, ProductResponseDto> {
 
-    @Mapping(target = "unit", source = "unit.id")
+    @Mapping(target = "unit", source = "unit.name")
+    @Mapping(target = "code", source = "catalog.name")
     ProductResponseDto toDto(Product product);
 
     List<ProductResponseDto> toDto(List<Product> products);
@@ -26,9 +28,10 @@ public interface ProductMapper extends EntityMapper<Product, ProductRequestDto, 
     Product fromDto(ProductRequestDto productRequestDto);
 
     @Mapping(target = "unit", ignore = true)
-    Product fromDto(ProductResponseDto productResponseDto);
+    Product fromDto(CentralProductResponseDto productResponseDto);
 
     @Mapping(target = "unit", ignore = true)
     void updateFromDto(ProductRequestDto productRequestDto, @MappingTarget Product product);
+
 
 }
