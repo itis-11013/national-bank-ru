@@ -12,7 +12,6 @@
 </head>
 <script>
     function createProduct() {
-        // const code = document.getElementById("product_catalogs")
         const formData = {
             name: document.getElementById("name").value,
             code: document.getElementById("product_catalogs").value,
@@ -20,7 +19,6 @@
             count: document.getElementById("count").value,
             price: document.getElementById("price").value
         }
-        console.log(formData)
         $.ajax({
             type: "POST",
             url: "/ru/product/",
@@ -79,7 +77,6 @@
                 </select>
             </div>
         </form>
-        <span id="span" class="text-danger font-weight-bold"></span>
         <div class="d-flex justify-content-center d-flex flex-column mt-5 mb-1">
             <input class="btn btn-primary" type="button" value="Add Product" onclick=createProduct()>
         </div>

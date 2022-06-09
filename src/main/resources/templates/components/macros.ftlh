@@ -33,7 +33,7 @@
                         <a href="<@spring.url '/product/'/>" class="nav-link <#if activeIndex==2>disabled</#if>">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a href="<@spring.url '/admin/contract'/>"
+                        <a href="<@spring.url '/product/market'/>"
                            class="nav-link <#if activeIndex==3>disabled</#if>">Market Products</a>
                     </li>
                     <li class="nav-item">

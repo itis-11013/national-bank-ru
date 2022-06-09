@@ -22,7 +22,6 @@
             address: document.getElementById("address").value,
             password: document.getElementById("password").value
         }
-        console.log(formData)
         $.ajax({
             type: "POST",
             url: "/ru/organization/",
@@ -31,10 +30,7 @@
             contentType: "application/json",
             success: function (response) {
                 alert(response.description)
-            },
-            errors: function (errors) {
-                console.log(errors)
-                $("#span").text(errors.text);
+                window.location.href = "/ru/auth/signIn"
             },
         });
 
@@ -73,7 +69,6 @@
                 </label>
             </div>
         </form>
-        <span id="span" class="text-danger font-weight-bold"></span>
         <div class="d-flex justify-content-center d-flex flex-column mt-5 mb-1">
             <input class="btn btn-success" type="button" value="Create" onclick=createOrganization()>
         </div>

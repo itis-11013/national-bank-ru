@@ -11,7 +11,6 @@
         const formData = {
             contractid: innerId,
         }
-        console.log(formData)
         $.ajax({
             type: "POST",
             url: "/ru/payment",

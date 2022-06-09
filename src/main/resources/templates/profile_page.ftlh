@@ -27,7 +27,6 @@
             password: document.getElementById("passwordCurrent").value,
             newPassword: document.getElementById("password").value,
         }
-        console.log(formData)
         $.ajax({
             type: "PATCH",
             url: "/ru/organization/${currentUser.id}",
