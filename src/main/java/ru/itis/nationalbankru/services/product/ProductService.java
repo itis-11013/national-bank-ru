@@ -1,8 +1,10 @@
 package ru.itis.nationalbankru.services.product;
 
 import ru.itis.nationalbankru.dto.PageableDto;
+import ru.itis.nationalbankru.dto.product.ProductCatalogResponse;
 import ru.itis.nationalbankru.dto.product.ProductRequestDto;
 import ru.itis.nationalbankru.dto.product.ProductResponseDto;
+import ru.itis.nationalbankru.dto.product.UnitResponse;
 import ru.itis.nationalbankru.entity.Product;
 import ru.itis.nationalbankru.entity.ProductCatalog;
 import ru.itis.nationalbankru.entity.Unit;
@@ -27,7 +29,6 @@ public interface ProductService {
 
     List<ProductResponseDto> getAllProducts(PageableDto pageable);
 
-
     Product getProductOrFetchByInnerId(UUID uuid) throws CentralResponseException;
 
     Product getProductByInnerId(UUID uuid);
@@ -35,6 +36,10 @@ public interface ProductService {
     void validateProductCountOnPurchase(UUID innerId, Double count) throws ProductExceedStockLimitException;
 
     ProductCatalog getProductCatalogByCode(String code) throws ProductCatalogNotFound;
+
+    List<UnitResponse> getUnits();
+
+    List<ProductCatalogResponse> getProductCatalog();
 
     Unit getUnitByCode(Long id) throws UnitNotFoundException;
 }
