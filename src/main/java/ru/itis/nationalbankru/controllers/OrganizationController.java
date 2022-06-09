@@ -21,11 +21,6 @@ public class OrganizationController {
 
     public final OrganizationService organizationService;
 
-    @GetMapping("/")
-    public String getCreateOrganizationForm() {
-        return "sign_up_page";
-    }
-
     @PostMapping("/")
     public ResponseEntity<GeneralResponse<OrganizationResponseDto>> createOrganization(
             @Valid @RequestBody OrganizationRequestDto organizationRequestDto) {
