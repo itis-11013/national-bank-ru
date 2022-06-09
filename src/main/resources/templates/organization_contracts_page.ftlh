@@ -28,7 +28,7 @@
 <@macros.navbar 4/>
 <div class="container-fluid d-flex flex-column">
     <h2 class="fw-bold my-3 text-dark"> My Contract</h2>
-    <table class="table table-striped table-bordered thead-dark table-info">
+    <table class="table table-striped table-bordered table-hover table-info">
         <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>

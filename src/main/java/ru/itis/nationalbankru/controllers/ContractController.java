@@ -53,7 +53,7 @@ public class ContractController {
             map.addAttribute("contracts", contractResponseDtos);
         } catch (Exception ignore) {
         }
-        return "my_contract_page";
+        return "organization_contracts_page";
     }
 
     @PostMapping("/")
