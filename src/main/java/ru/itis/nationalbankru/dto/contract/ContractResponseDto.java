@@ -8,6 +8,7 @@ import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.dto.product.ProductResponseDto;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author : Escalopa
@@ -19,9 +20,11 @@ import java.util.Date;
 @Getter
 @Setter
 public class ContractResponseDto extends AbstractResponse {
+    private UUID contractId;
     private Boolean isPaid;
     private Date paymentDate;
     private Integer count;
     private OrganizationResponseDto buyer;
     private ProductResponseDto product;
+    private Double amount;
 }
