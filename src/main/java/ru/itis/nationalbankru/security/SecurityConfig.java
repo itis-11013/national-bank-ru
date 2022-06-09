@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe()
                 .rememberMeCookieName("REMEMBER-ME")
                 .tokenRepository(persistentTokenRepository())
-                .tokenValiditySeconds(60 * 60); // 1 Hour token validity life-time
+                .tokenValiditySeconds(60 * 60 * 24); // 1 Day token validity life-time
 
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET"))
