@@ -12,30 +12,12 @@ import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
 
-import javax.validation.Valid;
-
 @Controller
 @RequestMapping("/organization")
 @RequiredArgsConstructor
 public class OrganizationController {
 
     public final OrganizationService organizationService;
-
-    @PostMapping("/")
-    public ResponseEntity<GeneralResponse<OrganizationResponseDto>> createOrganization(
-            @Valid @RequestBody OrganizationRequestDto organizationRequestDto) {
-        try {
-            OrganizationResponseDto organizationResponseDto = organizationService.createOrganization(organizationRequestDto);
-            return new GeneralResponse<OrganizationResponseDto>().successfulCreateResponse(
-                    organizationResponseDto,
-                    ResponseClass.organization);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return new GeneralResponse<OrganizationResponseDto>().failureCreateResponse(
-                    exception,
-                    ResponseClass.organization);
-        }
-    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<GeneralResponse<OrganizationResponseDto>> updateOrganizationById(
@@ -69,7 +51,7 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("#id == authentication.principal.id")
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<GeneralResponse<Long>> deleteOrganizationById(@PathVariable Long id) {
         try {

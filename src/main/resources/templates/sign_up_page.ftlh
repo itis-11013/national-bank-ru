@@ -22,15 +22,20 @@
             address: document.getElementById("address").value,
             password: document.getElementById("password").value
         }
+        console.log(formData)
         $.ajax({
             type: "POST",
-            url: "/ru/organization/",
+            methodName: "POST",
+            url: "/ru/auth/singUp",
             data: JSON.stringify(formData),
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
                 alert(response.description)
                 window.location.href = "/ru/auth/signIn"
+            },
+            error: function (error) {
+                console.log(error)
             },
         });
 
@@ -70,9 +75,9 @@
             </div>
         </form>
         <div class="d-flex justify-content-center d-flex flex-column mt-5 mb-1">
-            <input class="btn btn-success" type="button" value="Create" onclick=createOrganization()>
+            <input class="btn btn-success" type="button" value="Sign Up" onclick=createOrganization()>
         </div>
-        Already have an account<a href="/ru/auth/signIn"> Sign in</a>
+        Already have an account<a href="/ru/auth/signIn">Sign in</a>
     </div>
 </div>
 <@macros.footer/>
