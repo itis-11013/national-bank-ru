@@ -37,7 +37,11 @@ public class UserDetailImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return Status.ACTIVE.equals(this.organization.getStatus());
+        return Status.ACTIVE.equals(organization.getStatus());
+    }
+
+    public Long getId() {
+        return this.organization.getId();
     }
 
     @Override

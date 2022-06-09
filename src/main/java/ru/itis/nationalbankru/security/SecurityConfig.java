@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
@@ -30,9 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("customUserDetailsService")
     private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder,
-                          DataSource dataSource,
-                          UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(PasswordEncoder passwordEncoder, DataSource dataSource, UserDetailsServiceImpl userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
         this.userDetailsService = userDetailsService;
@@ -46,20 +44,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+
+        http.authorizeRequests()
+                .antMatchers("/auth/*").permitAll();
+
         http.authorizeRequests()
                 .antMatchers("/").authenticated()
-                .antMatchers("/admin/*").hasAuthority("ADMIN");
+                .antMatchers("/admin/*").hasAuthority("ADMIN")
+                .antMatchers("/contract").authenticated()
+                .antMatchers("/contract/*").authenticated()
+                .antMatchers("/organization").authenticated()
+                .antMatchers("/organization/*").authenticated()
+                .antMatchers("/product").authenticated()
+                .antMatchers("/product/*").authenticated()
+                .antMatchers("/payment").authenticated();
 
-        http.formLogin()
-                .loginPage("/auth/signIn")
-                .usernameParameter("email")
+
+        http.formLogin().loginPage("/auth/signIn")
+                .usernameParameter("name")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/")
                 .failureUrl("/auth/signIn?error");
 
-        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET"))
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
+        http.rememberMe()
+                .rememberMeCookieName("REMEMBER-ME")
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(60 * 60 * 24); // 1 Day token validity life-time
+
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET"))
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID");
     }
 
     @Bean

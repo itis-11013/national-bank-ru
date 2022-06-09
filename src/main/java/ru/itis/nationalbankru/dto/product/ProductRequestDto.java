@@ -1,5 +1,6 @@
 package ru.itis.nationalbankru.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.validation.constraints.DecimalMin;
@@ -30,5 +31,6 @@ public class ProductRequestDto {
     @DecimalMin(value = "1.0")
     private double price;
 
+    @JsonProperty(value = "sellerid")
     private UUID sellerId;
 }

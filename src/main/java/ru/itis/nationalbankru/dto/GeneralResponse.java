@@ -112,6 +112,7 @@ public class GeneralResponse<T> {
         organization,
         contract,
         user,
+        product
     }
 
     public enum RequestStatus {

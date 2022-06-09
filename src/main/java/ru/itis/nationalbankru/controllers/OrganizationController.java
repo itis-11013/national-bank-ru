@@ -2,8 +2,8 @@ package ru.itis.nationalbankru.controllers;
 
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.nationalbankru.dto.GeneralResponse;
@@ -12,36 +12,12 @@ import ru.itis.nationalbankru.dto.organization.OrganizationRequestDto;
 import ru.itis.nationalbankru.dto.organization.OrganizationResponseDto;
 import ru.itis.nationalbankru.services.organization.OrganizationService;
 
-import javax.validation.Valid;
-
 @Controller
 @RequestMapping("/organization")
 @RequiredArgsConstructor
-@Slf4j
 public class OrganizationController {
 
     public final OrganizationService organizationService;
-
-    @GetMapping("/")
-    public String getCreateOrganizationForm() {
-        return "create_organization_page";
-    }
-
-    @PostMapping("/")
-    public ResponseEntity<GeneralResponse<OrganizationResponseDto>> createOrganization(
-            @Valid @RequestBody OrganizationRequestDto organizationRequestDto) {
-        try {
-            OrganizationResponseDto organizationResponseDto = organizationService.createOrganization(organizationRequestDto);
-            return new GeneralResponse<OrganizationResponseDto>().successfulCreateResponse(
-                    organizationResponseDto,
-                    ResponseClass.organization);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return new GeneralResponse<OrganizationResponseDto>().failureCreateResponse(
-                    exception,
-                    ResponseClass.organization);
-        }
-    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<GeneralResponse<OrganizationResponseDto>> updateOrganizationById(
@@ -75,6 +51,7 @@ public class OrganizationController {
         }
     }
 
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<GeneralResponse<Long>> deleteOrganizationById(@PathVariable Long id) {
         try {

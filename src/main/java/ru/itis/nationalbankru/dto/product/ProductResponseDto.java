@@ -1,9 +1,6 @@
 package ru.itis.nationalbankru.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-
-import java.util.UUID;
 
 /**
  * @author : Escalopa
@@ -17,15 +14,10 @@ public class ProductResponseDto {
 
     private String name;
 
-    @JsonProperty(value = "productid")
-    private UUID innerId;
-
     private double count;
 
-    private Long unit;
+    private String unit;
 
     private double price;
 
-    @JsonProperty(value = "sellerid")
-    private UUID sellerId;
 }

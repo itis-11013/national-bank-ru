@@ -20,6 +20,8 @@ public interface ContractService {
 
     List<ContractResponseDto> getAllContracts(PageableDto pageableDto);
 
+    List<ContractResponseDto> getAllMyContract(PageableDto pageableDto);
+
     ContractResponseDto createContract(ContractRequestDto contractRequestDto) throws
             OrganizationNotFoundException,
             NoSufficientFundException,
