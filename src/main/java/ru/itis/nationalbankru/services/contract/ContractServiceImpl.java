@@ -2,6 +2,7 @@ package ru.itis.nationalbankru.services.contract;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.itis.nationalbankru.dto.PageableDto;
 import ru.itis.nationalbankru.dto.central.contract.CentralContractRequestDto;
@@ -12,6 +13,7 @@ import ru.itis.nationalbankru.entity.Organization;
 import ru.itis.nationalbankru.entity.Product;
 import ru.itis.nationalbankru.exceptions.*;
 import ru.itis.nationalbankru.helpers.OrganizationHelper;
+import ru.itis.nationalbankru.helpers.PageHelper;
 import ru.itis.nationalbankru.mappers.ContractMapper;
 import ru.itis.nationalbankru.repositories.ContractRepository;
 import ru.itis.nationalbankru.repositories.OrganizationRepository;
@@ -40,16 +42,26 @@ public class ContractServiceImpl implements ContractService {
     private final OrganizationRepository organizationRepository;
     private final ProductRepository productRepository;
     private final OrganizationHelper organizationHelper;
+    private final PageHelper pageHelper;
     private final ContractMapper contractMapper;
     private final ProductService productService;
     private final OrganizationService organizationService;
     private final CentralService<ContractRequestDto, ContractRequestDto> centralContractService;
-
     private final String entityPath = "organization";
 
     @Override
     public List<ContractResponseDto> getAllContracts(PageableDto pageableDto) {
-        return null;
+        Pageable pageable = pageHelper.toPageable(pageableDto);
+        List<Contract> contracts = contractRepository.findAll(pageable).getContent();
+        return contractMapper.toDto(contracts);
+    }
+
+    @Override
+    public List<ContractResponseDto> getAllMyContract(PageableDto pageableDto) {
+        Organization currentUser = organizationHelper.getCurrentOrganization();
+        Pageable pageable = pageHelper.toPageable(pageableDto);
+        List<Contract> contracts = contractRepository.findContractByProductSeller(currentUser, pageable).getContent();
+        return contractMapper.toDto(contracts);
     }
 
     @Override
