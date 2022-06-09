@@ -16,37 +16,35 @@
 <#macro navbar activeIndex>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid align-items-center">
-            <h2 class="navbar-brand ">Nation Bank Of Russia</h2>
+            <h2 class="navbar-brand pt-1">National Bank Of Russia</h2>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="<@spring.url '/product'/>" class="nav-link <#if activeIndex==0>disabled</#if>">Create
+                        <a href="<@spring.url '/'/>" class="nav-link <#if activeIndex==0>disabled</#if>">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<@spring.url '/product'/>" class="nav-link <#if activeIndex==1>disabled</#if>">Create
                             Product</a>
                     </li>
                     <li class="nav-item">
-                        <a href="<@spring.url '/product/'/>" class="nav-link <#if activeIndex==1>disabled</#if>">My
-                            Products</a>
+                        <a href="<@spring.url '/product/'/>" class="nav-link <#if activeIndex==2>disabled</#if>">Products</a>
                     </li>
                     <li class="nav-item">
                         <a href="<@spring.url '/admin/contract'/>"
-                           class="nav-link <#if activeIndex==2>disabled</#if>">Market Products</a>
+                           class="nav-link <#if activeIndex==3>disabled</#if>">Market Products</a>
                     </li>
                     <li class="nav-item">
-                        <a href="<@spring.url '/admin/product' />" class="nav-link <#if activeIndex==3>disabled</#if>">My
-                            Active Contracts</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="<@spring.url '/admin/product' />" class="nav-link <#if activeIndex==4>disabled</#if>">My
-                            All Contracts</a>
+                        <a href="<@spring.url '/contract/' />"
+                           class="nav-link <#if activeIndex==4>disabled</#if>">Contracts</a>
                     </li>
                 </ul>
             </div>
             <div class="navbar-nav">
                 <div class="nav-item text-nowrap">
-                    <a class="nav-link px-3" href="<@spring.url 'auth/logout'/>">Sign out</a>
+                    <a class="nav-link px-3" href="<@spring.url '/auth/logout'/>">Sign out</a>
                 </div>
             </div>
         </div>

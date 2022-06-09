@@ -8,7 +8,7 @@
 </head>
 
 <body class="bg-light">
-<@macros.navbar 1/>
+<@macros.navbar 2/>
 <div class="container-fluid d-flex flex-column">
     <h2 class="fw-bold my-3 text-dark"> My Products</h2>
     <table class="table table-striped table-bordered thead-dark table-info">

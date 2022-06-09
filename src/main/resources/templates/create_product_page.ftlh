@@ -29,16 +29,14 @@
             contentType: "application/json",
             success: function (response) {
                 alert(response.description)
-            },
-            errors: function (error) {
-                console.log(error)
-            },
+                window.location.href = "/ru/product/"
+            }
         });
     }
 
 </script>
 <body class="bg-light">
-<@macros.navbar 0/>
+<@macros.navbar 1/>
 <div class="d-flex justify-content-center align-items-center">
     <div class="bg-light m-4 p-4 border border-primary border-5 rounded shadow p-3 mb-5 bg-white rounded rounded-3"
          style="max-width:400px;">
@@ -64,7 +62,7 @@
                     <input class="form-control" id="count" type="number" placeholder="Count">
                 </label>
             </div>
-            <label> Product Catalog Type</label>
+            <label>Catalog Type</label>
             <div class="form-group mb-4 d-flex flex-column">
                 <select id="product_catalogs" class="form-select" aria-label="Default select example">
                     <#list product_catalogs as product_catalog>
@@ -72,13 +70,14 @@
                     </#list>
                 </select>
             </div>
-            <label>Product Unit Type</label>
-            <select id="units" class="form-select" aria-label="Default select example">
-                <#list units as unit>
-                    <option value=${unit.code}>${unit.name}</option>
-                </#list>
-            </select>
-
+            <div class="form-group mb-4 d-flex flex-column">
+                <label>Unit Type</label>
+                <select id="units" class="form-select" aria-label="Default select example">
+                    <#list units as unit>
+                        <option value=${unit.code}>${unit.name}</option>
+                    </#list>
+                </select>
+            </div>
         </form>
         <span id="span" class="text-danger font-weight-bold"></span>
         <div class="d-flex justify-content-center d-flex flex-column mt-5 mb-1">
