@@ -2,10 +2,8 @@ package ru.itis.nationalbankru.services.central;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
-import reactor.core.publisher.Mono;
 import ru.itis.nationalbankru.dto.central.CentralResponse;
 import ru.itis.nationalbankru.exceptions.CentralResponseException;
 import ru.itis.nationalbankru.exceptions.Exceptions;
@@ -33,7 +31,6 @@ public class CentralServiceImpl<T, E> implements CentralService<T, E> {
                 .uri(requestPath)
                 .body(BodyInserters.fromValue(data))
                 .retrieve()
-                .onStatus(HttpStatus::is5xxServerError, System.out::println)
                 .bodyToMono(new ParameterizedTypeReference<CentralResponse<UUID>>() {
                 }).block();
         if (response == null || response.isFailure()) {
