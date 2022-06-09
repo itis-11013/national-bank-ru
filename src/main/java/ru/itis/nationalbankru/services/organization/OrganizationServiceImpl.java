@@ -20,6 +20,7 @@ import ru.itis.nationalbankru.exceptions.CentralResponseException;
 import ru.itis.nationalbankru.exceptions.Exceptions;
 import ru.itis.nationalbankru.exceptions.NoSufficientFundException;
 import ru.itis.nationalbankru.exceptions.OrganizationNotFoundException;
+import ru.itis.nationalbankru.helpers.OrganizationHelper;
 import ru.itis.nationalbankru.helpers.PageHelper;
 import ru.itis.nationalbankru.mappers.OrganizationMapper;
 import ru.itis.nationalbankru.repositories.OrganizationRepository;
@@ -41,6 +42,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final RoleRepository roleRepository;
     private final OrganizationMapper organizationMapper;
     private final PageHelper pageHelper;
+    private final OrganizationHelper organizationHelper;
     private final CentralService<CentralOrganizationRequestDto, CentralOrganizationResponseDto> centralService;
     private final String entityPath = "organization";
     @Value("${organizationBalanceInitAmount}")
@@ -133,5 +135,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public boolean isOrganizationFromRussia(Long id) {
         return organizationRepository.findById(id).isPresent();
+    }
+
+    @Override
+    public OrganizationResponseDto getCurrentUser() {
+        Organization currentUser = organizationHelper.getCurrentOrganization();
+        return organizationMapper.toDto(currentUser);
     }
 }

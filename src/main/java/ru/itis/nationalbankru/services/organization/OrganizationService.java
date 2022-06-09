@@ -32,4 +32,6 @@ public interface OrganizationService {
     Organization getOrganizationByInnerId(UUID uuid) throws OrganizationNotFoundException;
 
     boolean isOrganizationFromRussia(Long id);
+
+    OrganizationResponseDto getCurrentUser();
 }
