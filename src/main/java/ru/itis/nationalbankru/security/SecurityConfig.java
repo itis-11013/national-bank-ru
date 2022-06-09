@@ -47,11 +47,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/resources").permitAll();
 
-        http.authorizeRequests().antMatchers("/").authenticated().antMatchers("/admin/*").hasAuthority("ADMIN");
+        http.authorizeRequests()
+                .antMatchers("/").authenticated()
+                .antMatchers("/admin/*").hasAuthority("ADMIN");
 
-        http.formLogin().loginPage("/auth/signIn").usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/").failureUrl("/auth/signIn?error");
+        http.formLogin().loginPage("/auth/signIn")
+                .usernameParameter("name")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/")
+                .failureUrl("/auth/signIn?error");
 
-        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET")).invalidateHttpSession(true).deleteCookies("JSESSIONID");
+        http.rememberMe()
+                .rememberMeCookieName("REMEMBER-ME")
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(60 * 60); // 1 Hour token validity life-time
+
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "GET"))
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID");
     }
 
     @Bean

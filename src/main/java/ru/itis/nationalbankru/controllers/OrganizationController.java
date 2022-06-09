@@ -23,7 +23,7 @@ public class OrganizationController {
 
     @GetMapping("/")
     public String getCreateOrganizationForm() {
-        return "create_organization_page";
+        return "sign_up_page";
     }
 
     @PostMapping("/")
