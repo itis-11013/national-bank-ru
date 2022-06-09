@@ -1,6 +1,8 @@
 package ru.itis.nationalbankru.dto.contract;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -10,8 +12,10 @@ import java.util.UUID;
  * @time : 09:11
  **/
 
-@Data
+@Getter
+@Setter
 public class ContractRequestDto {
+    @JsonProperty(value = "productid")
     private UUID productInnerId;
     private double count;
 }

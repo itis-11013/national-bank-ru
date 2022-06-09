@@ -32,6 +32,12 @@ public class ProductController {
 
     private final ProductService productService;
 
+
+    @GetMapping("/market")
+    public String getCentralProductPage() {
+        return "market_page";
+    }
+
     @GetMapping
     public String createProductPage(ModelMap map) {
         List<UnitResponse> unitResponses = productService.getUnits();
@@ -39,6 +45,16 @@ public class ProductController {
         map.addAttribute("units", unitResponses);
         map.addAttribute("product_catalogs", productCatalogResponses);
         return "create_product_page";
+    }
+
+    @GetMapping("/")
+    public String getOrganizationAllProducts(ModelMap map, PageableDto pageableDto) {
+        try {
+            List<ProductResponseDto> productRequestDtos = productService.getOrganizationProducts(pageableDto);
+            map.addAttribute("products", productRequestDtos);
+        } catch (Exception ignored) {
+        }
+        return "organization_products_page";
     }
 
     @PostMapping
@@ -57,13 +73,4 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/")
-    public String getOrganizationAllProducts(ModelMap map, PageableDto pageableDto) {
-        try {
-            List<ProductResponseDto> productRequestDtos = productService.getOrganizationProducts(pageableDto);
-            map.addAttribute("products", productRequestDtos);
-        } catch (Exception ignored) {
-        }
-        return "organization_products_page";
-    }
 }
